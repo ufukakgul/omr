@@ -33,137 +33,172 @@ class _LoginState extends State<Login> {
               0.9,
             ],
             colors: [
-              Colors.blue.shade700,
-              Colors.blue.shade600,
-              Colors.blue.shade200,
-              Colors.blue.shade100,
+              Color(0xffccd5ae),
+              Color(0xffe9edc9),
+              Color(0xfffefae0),
+              Color(0xffccd5ae),
+
             ],
           )),
           child: Column(
-            //mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 60.0,
-                  left: 20,
-                  right: 20,
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.3),
-                      //borderRadius: BorderRadius.all(Radius.circular(60))
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(60),
-                        topRight: Radius.circular(60),
-                        bottomRight: Radius.circular(10),
-                        bottomLeft: Radius.circular(10),
-                      )),
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 10.0),
-                      child: Column(
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(
-                                top: 0, left: 10, right: 10, bottom: 0),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(50),
-                              child: Stack(
-                                alignment: Alignment.bottomCenter,
-                                children: [
-                                  Image(
-                                    image: NetworkImage(
-                                        "https://ufuk.site/omr/assets/optikForm.jpg"),
-                                    color: Colors.white.withOpacity(0.5),
-                                    colorBlendMode: BlendMode.modulate,
-                                  ),
-                                  Text(
-                                    "Optik Form\nOkuma Sistemi",
-                                    textAlign: TextAlign.center,
-                                    style: GoogleFonts.robotoMono(
-                                        color: Colors.blue.shade900,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 25),
-                                  ),
-                                ],
-                              ),
+              Container(
+                width: ekranGenisligi / 15 * 14,
+                height: ekranYuksekligi / 15 * 14,
+                decoration: BoxDecoration(
+                    // color: Colors.white.withOpacity(0.3),
+                    color: Color(0xffccd5ae),
+                    //borderRadius: BorderRadius.all(Radius.circular(60))
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(60),
+                      topRight: Radius.circular(60),
+                      bottomRight: Radius.circular(10),
+                      bottomLeft: Radius.circular(10),
+                    )),
+                child: Column(
+                  children: [
+                    Text(
+                      "\nOptik Form\nOkuma Sistemi",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.robotoMono(
+                          color: Colors.blue.shade900,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(50),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Image(
+                              image: AssetImage("resimler/optikForm.jpg"),
+                              // image: NetworkImage(
+                              //     "https://ufuk.site/omr/assets/optikForm.jpg"),
+                              color: Colors.white.withOpacity(0.7),
+                              colorBlendMode: BlendMode.modulate,
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                top: 0, left: 30.0, right: 30.0, bottom: 10.0),
-                            child: Column(
-                              //crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Material(
-                                  color: Colors.transparent,
-                                  elevation: 20,
-                                  shadowColor: Colors.indigo,
-                                  child: TextField(
-                                    keyboardType: TextInputType.emailAddress,
-                                    decoration: InputDecoration(
-                                        hintText: "Kullanıcı Mail",
-                                        prefixIcon: Icon(Icons.person),
-                                        hintStyle:
-                                            TextStyle(color: Colors.grey),
-                                        filled: true,
-                                        fillColor: Colors.white,
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20.0)),
-                                          borderSide: BorderSide(
-                                              color: Colors.blue.shade700,
-                                              width: 2),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(15.0)),
-                                          borderSide: BorderSide(
-                                              color: Colors.blue.shade700,
-                                              width: 2),
-                                        )),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(left: 30.0, right: 30.0),
-                            child: Material(
-                              color: Colors.transparent,
-                              elevation: 20,
-                              shadowColor: Colors.indigo,
-                              child: TextField(
-                                textInputAction: TextInputAction.next,
-                                keyboardType: TextInputType.visiblePassword,
-                                decoration: InputDecoration(
-                                    hintText: "Şifre",
-                                    prefixIcon: Icon(Icons.vpn_key),
-                                    hintStyle: TextStyle(color: Colors.grey),
-                                    filled: true,
-                                    fillColor: Colors.white,
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(20.0)),
-                                      borderSide: BorderSide(
-                                          color: Colors.blue.shade700,
-                                          width: 2),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(15.0)),
-                                      borderSide: BorderSide(
-                                          color: Colors.blue.shade700,
-                                          width: 2),
-                                    )),
-                              ),
-                            ),
-                          )
-                        ],
+                            // Text(
+                            //   "\nOptik Form\nOkuma Sistemi",
+                            //   textAlign: TextAlign.center,
+                            //   style: GoogleFonts.robotoMono(
+                            //       color: Colors.blue.shade900,
+                            //       fontWeight: FontWeight.bold,
+                            //       fontSize: 25),
+                            // ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Material(
+                        color: Colors.transparent,
+                        elevation: 20,
+                        shadowColor: Colors.indigo,
+                        child: TextField(
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: InputDecoration(
+                              hintText: "Kullanıcı Mail",
+                              prefixIcon: Icon(Icons.person),
+                              hintStyle: TextStyle(color: Colors.grey),
+                              filled: true,
+                              fillColor: Colors.white,
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20.0)),
+                                borderSide: BorderSide(
+                                    color: Colors.blue.shade700, width: 2),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(15.0)),
+                                borderSide: BorderSide(
+                                    color: Colors.blue.shade700, width: 2),
+                              )),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(left: 8, right: 8, bottom: 16),
+                      child: Material(
+                        color: Colors.transparent,
+                        elevation: 20,
+                        shadowColor: Colors.indigo,
+                        child: TextField(
+                          textInputAction: TextInputAction.next,
+                          keyboardType: TextInputType.visiblePassword,
+                          decoration: InputDecoration(
+                              hintText: "Şifre",
+                              prefixIcon: Icon(Icons.vpn_key),
+                              hintStyle: TextStyle(color: Colors.grey),
+                              filled: true,
+                              fillColor: Colors.white,
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20.0)),
+                                borderSide: BorderSide(
+                                    color: Colors.blue.shade700, width: 2),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(15.0)),
+                                borderSide: BorderSide(
+                                    color: Colors.blue.shade700, width: 2),
+                              )),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 180,
+                      height: 45,
+                      child: ElevatedButton.icon(
+                        onPressed: () {},
+                        icon: Icon(Icons.arrow_forward),
+                        label: Text("GİRİŞ YAP", style: GoogleFonts.robotoMono(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14
+                        ),),
+                        style: ElevatedButton.styleFrom(
+                            primary: Colors.blue.shade600,
+                            onPrimary: Colors.white,
+                            shadowColor: Colors.grey,
+                            elevation: 20,
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            )),
+                      ),
+                    ),
+                    SizedBox(
+                      height: ekranYuksekligi/14,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Hesabınız Yok Mu?   ", style: TextStyle(color: Colors.black),),
+                        TextButton(
+                            style: TextButton.styleFrom(
+                              minimumSize: Size.zero,
+                              padding: EdgeInsets.zero,
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            ),
+                            onPressed: () {},
+                            child: Text("Üye Ol", style: TextStyle(color: Colors.black, decoration: TextDecoration.underline),)),
+                      ],
+                    ),
+                    TextButton(
+                        style: TextButton.styleFrom(
+                          minimumSize: Size.zero,
+                          padding: EdgeInsets.only(top: 5),
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        onPressed: () {},
+                        child: Text("Şifrenizi mi unuttunuz?", style: TextStyle(color: Colors.black , decoration: TextDecoration.underline),)),
+                  ],
                 ),
               )
             ],
