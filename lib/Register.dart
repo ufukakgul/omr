@@ -1,18 +1,18 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:omr/Register.dart';
-import 'package:omr/ResetPassword.dart';
 import 'package:fluttericon/mfg_labs_icons.dart';
 
-class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+
+class Register extends StatefulWidget {
+  const Register({Key? key}) : super(key: key);
 
   @override
-  State<Login> createState() => _LoginState();
+  State<Register> createState() => _RegisterState();
 }
 
-class _LoginState extends State<Login> {
+class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     var ekranBilgisi = MediaQuery.of(context);
@@ -24,25 +24,24 @@ class _LoginState extends State<Login> {
         height: ekranYuksekligi,
         decoration: BoxDecoration(
             gradient: LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomRight,
-          stops: const [
-            0.1,
-            0.2,
-            0.8,
-            0.9,
-          ],
-          colors: [
-            Color(0xff5e4d91).withOpacity(0.7),
-            Color(0xff5e4d91).withOpacity(0.6),
-            Color(0xff5e4d91).withOpacity(0.2),
-            Color(0xff5e4d91).withOpacity(0.1),
-          ],
-        )),
+              begin: Alignment.topRight,
+              end: Alignment.bottomRight,
+              stops: const [
+                0.1,
+                0.2,
+                0.8,
+                0.9,
+              ],
+              colors: [
+                Color(0xff5e4d91).withOpacity(0.7),
+                Color(0xff5e4d91).withOpacity(0.6),
+                Color(0xff5e4d91).withOpacity(0.2),
+                Color(0xff5e4d91).withOpacity(0.1),
+              ],
+            )),
         child: Padding(
           padding: const EdgeInsets.only(top: 50, left: 10, right: 10),
           child: Column(
-            //crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: Container(
@@ -57,13 +56,14 @@ class _LoginState extends State<Login> {
                         Padding(
                           padding: EdgeInsets.only(top: ekranYuksekligi/20, bottom: ekranYuksekligi/50),
                           child: Icon(
-                            MfgLabs.user,
+                            MfgLabs.users,
+                            //Elusive.group,
                             size: 100,
                             color: Colors.black.withOpacity(0.7),
                           ),
                         ),
                         Padding(
-                          padding:  EdgeInsets.only(bottom: ekranYuksekligi/20),
+                          padding: EdgeInsets.only(bottom: ekranYuksekligi/20),
                           child: Text(
                             "Optik Form\nOkuma Sistemi",
                             textAlign: TextAlign.center,
@@ -77,7 +77,38 @@ class _LoginState extends State<Login> {
                           padding: const EdgeInsets.only(left: 10.0),
                           child: Align(
                               alignment: Alignment.centerLeft,
-                              child: Text("Giriş Yap", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),)),
+                              child: Text("Kayıt Ol", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),)),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only( left: 8, right: 8),
+                          child: Material(
+                            color: Colors.transparent,
+                            elevation: 20,
+                            shadowColor: Colors.indigo,
+                            child: TextField(
+                              keyboardType: TextInputType.emailAddress,
+                              decoration: InputDecoration(
+                                  hintText: "Kullanıcı Adı",
+                                  prefixIcon: Icon(Icons.person),
+                                  hintStyle: TextStyle(color: Colors.grey),
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(20.0)),
+                                    borderSide: BorderSide(
+                                        color: Color(0xff736e7e),
+                                        width: 2),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(15.0)),
+                                    borderSide: BorderSide(
+                                        color: Color(0xff736e7e),
+                                        width: 2),
+                                  )),
+                            ),
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -89,10 +120,7 @@ class _LoginState extends State<Login> {
                               keyboardType: TextInputType.emailAddress,
                               decoration: InputDecoration(
                                   hintText: "E-Posta",
-                                  prefixIcon: Icon(
-                                    Icons.person,
-                                    color: Colors.grey,
-                                  ),
+                                  prefixIcon: Icon(Icons.person),
                                   hintStyle: TextStyle(color: Colors.grey),
                                   filled: true,
                                   fillColor: Colors.white,
@@ -100,13 +128,15 @@ class _LoginState extends State<Login> {
                                     borderRadius: BorderRadius.all(
                                         Radius.circular(20.0)),
                                     borderSide: BorderSide(
-                                        color: Color(0xff736e7e), width: 2),
+                                        color: Color(0xff736e7e),
+                                        width: 2),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.all(
                                         Radius.circular(15.0)),
                                     borderSide: BorderSide(
-                                        color: Color(0xff736e7e), width: 2),
+                                        color: Color(0xff736e7e),
+                                        width: 2),
                                   )),
                             ),
                           ),
@@ -123,10 +153,7 @@ class _LoginState extends State<Login> {
                               keyboardType: TextInputType.visiblePassword,
                               decoration: InputDecoration(
                                   hintText: "Şifre",
-                                  prefixIcon:
-                                      Icon(Icons.vpn_key, color: Colors.grey),
-                                  prefixIconColor: Colors.amber,
-                                  suffixIconColor: Colors.red,
+                                  prefixIcon: Icon(Icons.vpn_key),
                                   hintStyle: TextStyle(color: Colors.grey),
                                   filled: true,
                                   fillColor: Colors.white,
@@ -134,13 +161,15 @@ class _LoginState extends State<Login> {
                                     borderRadius: BorderRadius.all(
                                         Radius.circular(20.0)),
                                     borderSide: BorderSide(
-                                        color: Color(0xff736e7e), width: 2),
+                                        color: Color(0xff736e7e),
+                                        width: 2),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.all(
                                         Radius.circular(15.0)),
                                     borderSide: BorderSide(
-                                        color: Color(0xff736e7e), width: 2),
+                                        color: Color(0xff736e7e),
+                                        width: 2),
                                   )),
                             ),
                           ),
@@ -150,9 +179,9 @@ class _LoginState extends State<Login> {
                           height: 45,
                           child: ElevatedButton.icon(
                             onPressed: () {},
-                            icon: Icon(Icons.arrow_forward),
+                            icon: Icon(Icons.save),
                             label: Text(
-                              "Giriş Yap",
+                              "KAYDET",
                               style: GoogleFonts.robotoMono(
                                   fontWeight: FontWeight.bold, fontSize: 14),
                             ),
@@ -163,64 +192,10 @@ class _LoginState extends State<Login> {
                                 elevation: 20,
                                 shape: RoundedRectangleBorder(
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
+                                  BorderRadius.all(Radius.circular(10)),
                                 )),
                           ),
                         ),
-                        SizedBox(
-                          height: ekranYuksekligi / 14,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Hesabınız Yok Mu?   ",
-                              style: TextStyle(color: Color(0xff736e7e)),
-                            ),
-                            TextButton(
-                                style: TextButton.styleFrom(
-                                  minimumSize: Size.zero,
-                                  padding: EdgeInsets.zero,
-                                  tapTargetSize:
-                                      MaterialTapTargetSize.shrinkWrap,
-                                ),
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Register()));
-                                },
-                                child: Text(
-                                  "Üye Ol",
-                                  style: TextStyle(
-                                      color: Color(0xff736e7e),
-                                      decoration: TextDecoration.underline),
-                                )),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: TextButton(
-                              style: TextButton.styleFrom(
-                                minimumSize: Size.zero,
-                                padding: EdgeInsets.only(top: 5),
-                                tapTargetSize:
-                                    MaterialTapTargetSize.shrinkWrap,
-                              ),
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            ResetPassword()));
-                              },
-                              child: Text(
-                                "Şifrenizi mi unuttunuz?",
-                                style: TextStyle(
-                                    color: Color(0xff736e7e),
-                                    decoration: TextDecoration.underline),
-                              )),
-                        )
                       ],
                     ),
                   ),
