@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:omr/Login.dart';
+import 'package:omr/KullaniciIslemleri/Login.dart';
 void main() {
   runApp(MyApp());
 }

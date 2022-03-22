@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:omr/Register.dart';
-import 'package:omr/ResetPassword.dart';
+import 'package:omr/KullaniciIslemleri/Register.dart';
+import 'package:omr/KullaniciIslemleri/ResetPassword.dart';
 import 'package:fluttericon/mfg_labs_icons.dart';
 
 class Login extends StatefulWidget {
@@ -13,6 +13,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  bool sifreTiklama = true;
   @override
   Widget build(BuildContext context) {
     var ekranBilgisi = MediaQuery.of(context);
@@ -42,7 +43,6 @@ class _LoginState extends State<Login> {
         child: Padding(
           padding: const EdgeInsets.only(top: 50, left: 10, right: 10),
           child: Column(
-            //crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: Container(
@@ -55,15 +55,7 @@ class _LoginState extends State<Login> {
                     child: Column(
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(top: ekranYuksekligi/20, bottom: ekranYuksekligi/50),
-                          child: Icon(
-                            MfgLabs.user,
-                            size: 100,
-                            color: Colors.black.withOpacity(0.7),
-                          ),
-                        ),
-                        Padding(
-                          padding:  EdgeInsets.only(bottom: ekranYuksekligi/20),
+                          padding:  EdgeInsets.only(bottom: ekranYuksekligi/20, top: ekranYuksekligi/20),
                           child: Text(
                             "Optik Form\nOkuma Sistemi",
                             textAlign: TextAlign.center,
@@ -73,6 +65,15 @@ class _LoginState extends State<Login> {
                                 fontSize: 25),
                           ),
                         ),
+                        Padding(
+                          padding: EdgeInsets.only(top: ekranYuksekligi/40, bottom: ekranYuksekligi/50),
+                          child: Icon(
+                            MfgLabs.user,
+                            size: 100,
+                            color: Colors.black.withOpacity(0.7),
+                          ),
+                        ),
+
                         Padding(
                           padding: const EdgeInsets.only(left: 10.0),
                           child: Align(
@@ -121,10 +122,21 @@ class _LoginState extends State<Login> {
                             child: TextField(
                               textInputAction: TextInputAction.next,
                               keyboardType: TextInputType.visiblePassword,
+                              obscureText: sifreTiklama,
                               decoration: InputDecoration(
                                   hintText: "Şifre",
                                   prefixIcon:
                                       Icon(Icons.vpn_key, color: Colors.grey),
+                                  suffixIcon: IconButton(
+                                    icon: Icon(sifreTiklama
+                                        ? Icons.visibility
+                                        : Icons.visibility_off),
+                                    onPressed: () {
+                                      setState(() {
+                                        sifreTiklama = !sifreTiklama;
+                                      });
+                                    },
+                                  ),
                                   prefixIconColor: Colors.amber,
                                   suffixIconColor: Colors.red,
                                   hintStyle: TextStyle(color: Colors.grey),

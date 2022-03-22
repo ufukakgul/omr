@@ -1,9 +1,9 @@
-// ignore_for_file: prefer_const_constructors
-
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fluttericon/mfg_labs_icons.dart';
-
+import 'package:fluttericon/fontelico_icons.dart';
+import 'package:http/http.dart' as http;
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
@@ -13,6 +13,184 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
+  final kAdiController = TextEditingController();
+  final kMailController = TextEditingController();
+  final kSifreController = TextEditingController();
+  bool isLoading = false;
+  bool sifreTiklama = true;
+
+  Future<String> kisiEkle(String kAdi, String kMail, String kSifre) async {
+    var url = Uri.parse("http://ufuk.site/omr/kullanici_islemleri/kullanici_ekle.php");
+    var veri = {
+      "kAdi": kAdi,
+      "kMail": kMail,
+      "kSifre": kSifre,
+    };
+    var cevap = await http.post(url, body: veri);
+    print("Cevap: ${cevap.body}");
+    if(cevap.body.contains("mail")) {
+      return cevap.body.toString();
+    } else if (cevap.body.contains("kullanici")) {
+      return cevap.body.toString();
+    } else return cevap.body.toString();
+  }
+
+  Future<void> kullaniciVar() async {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(duration: Duration(seconds: 1),
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Icon(Fontelico.emo_unhappy, size: 15),
+          Text("Bu kullanıcı adı ile kayıtlı kullanıcı var",
+              style: TextStyle(color: Colors.black)),
+        ],
+      ),
+      width: 300,
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.white54,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+    ));
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  Future<void> mailVar() async {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(duration: Duration(seconds: 1),
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Icon(Fontelico.emo_unhappy, size: 15),
+          Text("Bu mail ile kayıtlı kullanıcı var",
+              style: TextStyle(color: Colors.black)),
+        ],
+      ),
+      width: 240,
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.white54,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+    ));
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  Future<void> kullaniciOlusturuldu() async {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(duration: Duration(seconds: 1),
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Icon(Fontelico.emo_wink, size: 15),
+          Text("Kayıt oluşturuldu.", style: TextStyle(color: Colors.black)),
+        ],
+      ),
+      width: 180,
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.white54,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+    ));
+    kAdiController.text = "";
+    kMailController.text = "";
+    kSifreController.text = "";
+    setState(() {
+      isLoading = false;
+    });
+    await Future.delayed(Duration(milliseconds: 1200));
+    // Navigator.pushReplacement(
+    //     context, MaterialPageRoute(builder: (context) => LoginPage()));
+  }
+
+  Future<void> girilenBilgileriKontrolEt() async {
+    setState(() {
+      isLoading = true;
+    });
+    if (kAdiController.text.length < 3) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Icon(
+              Fontelico.emo_unhappy,
+              size: 15,
+            ),
+            Text(
+              "Geçerli bir kullanıcı adı girin.",
+              style: TextStyle(color: Colors.black),
+            ),
+          ],
+        ),
+        width: 240,
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.white54,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+      ));
+      setState(() {
+        isLoading = false;
+      });
+    } else if ((!((kMailController.text).contains("@"))) ||
+        (!((kMailController.text).contains(".")))) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Icon(Fontelico.emo_unhappy, size: 15),
+            Text("Geçerli bir mail adresi girin.",
+                style: TextStyle(color: Colors.black)),
+          ],
+        ),
+        width: 240,
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.white54,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+      ));
+      setState(() {
+        isLoading = false;
+      });
+    } else if ((kSifreController.text).isEmpty ||
+        (kSifreController.text.length) <= 3) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Icon(Fontelico.emo_unhappy, size: 15),
+            Text("Geçerli bir şifre girin.",
+                style: TextStyle(color: Colors.black)),
+          ],
+        ),
+        width: 180,
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.white54,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+      ));
+      setState(() {
+        isLoading = false;
+      });
+    } else {
+      kisiEkle(kAdiController.text, kMailController.text, kSifreController.text)
+          .then(
+            (value) => value.contains("true") ? kullaniciOlusturuldu() : (value.contains("kullanici") ? kullaniciVar() : mailVar()),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var ekranBilgisi = MediaQuery.of(context);
@@ -54,16 +232,7 @@ class _RegisterState extends State<Register> {
                     child: Column(
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(top: ekranYuksekligi/20, bottom: ekranYuksekligi/50),
-                          child: Icon(
-                            MfgLabs.users,
-                            //Elusive.group,
-                            size: 100,
-                            color: Colors.black.withOpacity(0.7),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(bottom: ekranYuksekligi/20),
+                          padding: EdgeInsets.only(bottom: ekranYuksekligi/20, top: ekranYuksekligi/20),
                           child: Text(
                             "Optik Form\nOkuma Sistemi",
                             textAlign: TextAlign.center,
@@ -74,18 +243,28 @@ class _RegisterState extends State<Register> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(left: 10.0),
+                          padding: EdgeInsets.only(top: ekranYuksekligi/40, bottom: ekranYuksekligi/50),
+                          child: Icon(
+                            MfgLabs.users,
+                            //Elusive.group,
+                            size: 100,
+                            color: Colors.black.withOpacity(0.7),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10.0, bottom: 8),
                           child: Align(
                               alignment: Alignment.centerLeft,
                               child: Text("Kayıt Ol", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),)),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only( left: 8, right: 8),
+                          padding: const EdgeInsets.only(left: 8, right: 8),
                           child: Material(
                             color: Colors.transparent,
                             elevation: 20,
                             shadowColor: Colors.indigo,
                             child: TextField(
+                              controller: kAdiController,
                               keyboardType: TextInputType.emailAddress,
                               decoration: InputDecoration(
                                   hintText: "Kullanıcı Adı",
@@ -117,6 +296,7 @@ class _RegisterState extends State<Register> {
                             elevation: 20,
                             shadowColor: Colors.indigo,
                             child: TextField(
+                              controller: kMailController,
                               keyboardType: TextInputType.emailAddress,
                               decoration: InputDecoration(
                                   hintText: "E-Posta",
@@ -149,11 +329,23 @@ class _RegisterState extends State<Register> {
                             elevation: 20,
                             shadowColor: Colors.indigo,
                             child: TextField(
+                              controller: kSifreController,
+                              obscureText: sifreTiklama,
                               textInputAction: TextInputAction.next,
                               keyboardType: TextInputType.visiblePassword,
                               decoration: InputDecoration(
                                   hintText: "Şifre",
                                   prefixIcon: Icon(Icons.vpn_key),
+                                  suffixIcon: IconButton(
+                                    icon: Icon(sifreTiklama
+                                        ? Icons.visibility
+                                        : Icons.visibility_off),
+                                    onPressed: () {
+                                      setState(() {
+                                        sifreTiklama = !sifreTiklama;
+                                      });
+                                    },
+                                  ),
                                   hintStyle: TextStyle(color: Colors.grey),
                                   filled: true,
                                   fillColor: Colors.white,
@@ -178,7 +370,10 @@ class _RegisterState extends State<Register> {
                           width: 180,
                           height: 45,
                           child: ElevatedButton.icon(
-                            onPressed: () {},
+                            onPressed: () {
+                              girilenBilgileriKontrolEt();
+                              //kisiEkle(kAdiController.text, kMailController.text, kSifreController.text);
+                            },
                             icon: Icon(Icons.save),
                             label: Text(
                               "KAYDET",
