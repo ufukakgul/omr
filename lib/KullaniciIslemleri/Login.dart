@@ -1,9 +1,14 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:omr/KullaniciIslemleri/Register.dart';
 import 'package:omr/KullaniciIslemleri/ResetPassword.dart';
 import 'package:fluttericon/mfg_labs_icons.dart';
+import 'package:fluttericon/fontelico_icons.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -14,6 +19,75 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   bool sifreTiklama = true;
+  var kAdiController = TextEditingController();
+  var kSifreController = TextEditingController();
+  late String girisYapanKullaniciAdi;
+  late String girisYapanKullaniciId;
+  bool isLoading = false;
+
+  Future<String> girisYap(String kAdi, String kSifre) async {
+    var url = Uri.parse("http://ufuk.site/omr/kullanici_islemleri/kullanici_giris.php");
+    var veri = {
+      "kAdi": kAdi,
+      "kSifre": kSifre,
+    };
+    var cevap = await http.post(url, body: veri);
+    var jsonVeri = jsonDecode(cevap.body);
+    if(cevap.body.contains("false")) {
+      return "false";
+    } else if (cevap.body.contains("true")) {
+      girisYapanKullaniciId = (jsonVeri["mesaj"][0]["id"]).toString();
+      girisYapanKullaniciAdi = jsonVeri["mesaj"][0]["kAdi"];
+      return girisYapanKullaniciAdi;
+    }else {
+      return "false";
+    }
+  }
+
+  Future<void> hataliGiris() async {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      duration: Duration(seconds: 1),
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Icon(Fontelico.emo_unhappy, size: 15),
+          Text("Kullanıcı Adı yada Şifre Hatalı",
+              style: TextStyle(color: Colors.black)),
+        ],
+      ),
+      width: 240,
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.white54,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+    ));
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  Future<void> basarililiGiris() async {
+    var sp = await SharedPreferences.getInstance();
+    sp.setString("girisDurum", "1");
+    sp.setString("kullanici_adi", girisYapanKullaniciAdi);
+    sp.setString("kullanici_id", girisYapanKullaniciId);
+    // Navigator.pushReplacement(
+    //     context, MaterialPageRoute(builder: (context) => MenuSayfasi()));
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  Future<void> girilenBilgileriKontrolEt() async {
+    setState(() {
+      isLoading = true;
+    });
+      girisYap(kAdiController.text, kSifreController.text)
+          .then((value) => value == "false" ? hataliGiris() : basarililiGiris());
+  }
+
   @override
   Widget build(BuildContext context) {
     var ekranBilgisi = MediaQuery.of(context);
@@ -88,8 +162,9 @@ class _LoginState extends State<Login> {
                             shadowColor: Colors.indigo,
                             child: TextField(
                               keyboardType: TextInputType.emailAddress,
+                              controller: kAdiController,
                               decoration: InputDecoration(
-                                  hintText: "E-Posta",
+                                  hintText: "Kullanıcı Adı",
                                   prefixIcon: Icon(
                                     Icons.person,
                                     color: Colors.grey,
@@ -123,6 +198,7 @@ class _LoginState extends State<Login> {
                               textInputAction: TextInputAction.next,
                               keyboardType: TextInputType.visiblePassword,
                               obscureText: sifreTiklama,
+                              controller: kSifreController,
                               decoration: InputDecoration(
                                   hintText: "Şifre",
                                   prefixIcon:
@@ -161,7 +237,9 @@ class _LoginState extends State<Login> {
                           width: 180,
                           height: 45,
                           child: ElevatedButton.icon(
-                            onPressed: () {},
+                            onPressed: () {
+                              girilenBilgileriKontrolEt();
+                            },
                             icon: Icon(Icons.arrow_forward),
                             label: Text(
                               "Giriş Yap",
