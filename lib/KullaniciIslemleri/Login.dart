@@ -8,6 +8,7 @@ import 'package:omr/KullaniciIslemleri/ResetPassword.dart';
 import 'package:fluttericon/mfg_labs_icons.dart';
 import 'package:fluttericon/fontelico_icons.dart';
 import 'package:http/http.dart' as http;
+import 'package:omr/Testler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
@@ -73,8 +74,8 @@ class _LoginState extends State<Login> {
     sp.setString("girisDurum", "1");
     sp.setString("kullanici_adi", girisYapanKullaniciAdi);
     sp.setString("kullanici_id", girisYapanKullaniciId);
-    // Navigator.pushReplacement(
-    //     context, MaterialPageRoute(builder: (context) => MenuSayfasi()));
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => Testler()));
     setState(() {
       isLoading = false;
     });
