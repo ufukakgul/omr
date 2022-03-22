@@ -6,14 +6,14 @@ import 'package:omr/KullaniciIslemleri/Login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Testler extends StatefulWidget {
-  const Testler({Key? key}) : super(key: key);
+  const Testler(this.kAdi, {Key? key}) : super(key: key);
 
+  final String kAdi;
   @override
   State<Testler> createState() => _TestlerState();
 }
 
 class _TestlerState extends State<Testler> {
-  var kAdi;
   var kId;
   Future<String> kullanici_adi() async {
     var sp = await SharedPreferences.getInstance();
@@ -37,7 +37,6 @@ class _TestlerState extends State<Testler> {
   }
   @override
   void initState() {
-    kullanici_adi().then((value) => kAdi=value);
     // TODO: implement initState
     super.initState();
   }
@@ -54,7 +53,7 @@ class _TestlerState extends State<Testler> {
           children: [
             Text("Optik Form Okuma Sistemi", style: TextStyle(color: Colors.white, fontSize: 16),),
             Text("  --  "),
-            Text("$kAdi", style: TextStyle(color: Colors.white, fontSize: 16),),
+            Text(widget.kAdi, style: TextStyle(color: Colors.white, fontSize: 16),),
           ],
         ),
         leading: Padding(
