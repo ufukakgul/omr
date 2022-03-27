@@ -12,11 +12,13 @@ void main() {
 }
 class MyApp extends StatelessWidget {
   String? kAdi;
+  String? kId;
   Future<bool> oturumKontrol() async {
     var sp = await SharedPreferences.getInstance();
     String? spDurum = sp.getString("girisDurum");
     if(spDurum == "1"){
       kAdi = sp.getString("kullanici_adi");
+      kId = sp.getString("kullanici_id");
       return true;
     }
     else{
@@ -33,7 +35,7 @@ class MyApp extends StatelessWidget {
         builder: (context, snapshot){
           if(snapshot.hasData){
             bool gecisIzni = snapshot.data!;
-            return gecisIzni ? Testler(kAdi!) : Login();
+            return gecisIzni ? Testler(kAdi!, kId!) : Login();
           }else{
             return Container(
             );

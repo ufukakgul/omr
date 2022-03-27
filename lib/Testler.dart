@@ -9,15 +9,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class Testler extends StatefulWidget {
-  const Testler(this.kAdi, {Key? key}) : super(key: key);
+  const Testler(this.kAdi, this.kId, {Key? key}) : super(key: key);
 
   final String kAdi;
+  final String kId;
   @override
   State<Testler> createState() => _TestlerState();
 }
 
 class _TestlerState extends State<Testler> {
-  var kId;
+  late String girisYapanKullaniciTestId;
+  late String girisYapanKullaniciId;
   Future<String> kullanici_adi() async {
     var sp = await SharedPreferences.getInstance();
     String? kAdi = sp.getString("kullanici_adi");
@@ -37,6 +39,24 @@ class _TestlerState extends State<Testler> {
     sp.remove("kullanici_id");
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => Login()));
+  }
+
+  Future<String> kayitListele(String kullanici_id) async {
+    var url = Uri.parse("http://ufuk.site/omr/test_islemleri/testleri_listele.php");
+    var veri = {
+      "kullanici_id": kullanici_id,
+    };
+    var cevap = await http.post(url, body: veri);
+    var jsonVeri = jsonDecode(cevap.body);
+    if(cevap.body.contains("false")) {
+      return "Kayıt Yok";
+    } else if (cevap.body.contains("true")) {
+      girisYapanKullaniciId = (jsonVeri["kayitlar"][0]["kullanici_id"]).toString();
+      girisYapanKullaniciTestId = jsonVeri["kayitlar"][0]["test_id"];
+      return girisYapanKullaniciId;
+    }else {
+      return "Hatalı Giriş";
+    }
   }
 
   @override
@@ -101,7 +121,7 @@ class _TestlerState extends State<Testler> {
               height: 45,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  cikisYap();
+                  kayitListele(widget.kId).then((value) => print(value));
                 },
                 icon: Icon(Icons.arrow_forward),
                 label: Text(

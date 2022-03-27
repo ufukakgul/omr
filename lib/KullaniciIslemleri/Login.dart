@@ -75,7 +75,7 @@ class _LoginState extends State<Login> {
     sp.setString("kullanici_adi", girisYapanKullaniciAdi);
     sp.setString("kullanici_id", girisYapanKullaniciId);
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => Testler(girisYapanKullaniciAdi)));
+        context, MaterialPageRoute(builder: (context) => Testler(girisYapanKullaniciAdi, girisYapanKullaniciId)));
     setState(() {
       isLoading = false;
     });
