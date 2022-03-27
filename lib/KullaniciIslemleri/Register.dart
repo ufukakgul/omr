@@ -19,12 +19,12 @@ class _RegisterState extends State<Register> {
   bool isLoading = false;
   bool sifreTiklama = true;
 
-  Future<String> kisiEkle(String kAdi, String kMail, String kSifre) async {
+  Future<String> kisiEkle(String kullanici_adi, String kullanici_mail, String kullanici_sifre) async {
     var url = Uri.parse("http://ufuk.site/omr/kullanici_islemleri/kullanici_ekle.php");
     var veri = {
-      "kAdi": kAdi,
-      "kMail": kMail,
-      "kSifre": kSifre,
+      "kullanici_adi": kullanici_adi,
+      "kullanici_mail": kullanici_mail,
+      "kullanici_sifre": kullanici_sifre,
     };
     var cevap = await http.post(url, body: veri);
     print("Cevap: ${cevap.body}");

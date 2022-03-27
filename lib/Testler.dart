@@ -1,9 +1,12 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:omr/KullaniciIslemleri/Login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class Testler extends StatefulWidget {
   const Testler(this.kAdi, {Key? key}) : super(key: key);
@@ -35,6 +38,7 @@ class _TestlerState extends State<Testler> {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => Login()));
   }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -92,6 +96,30 @@ class _TestlerState extends State<Testler> {
             )),
         child: Column(
           children: [
+            SizedBox(
+              width: 140,
+              height: 45,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  cikisYap();
+                },
+                icon: Icon(Icons.arrow_forward),
+                label: Text(
+                  "Çıkış Yap",
+                  style: GoogleFonts.robotoMono(
+                      fontWeight: FontWeight.bold, fontSize: 14),
+                ),
+                style: ElevatedButton.styleFrom(
+                    primary: Color(0xff736e7e),
+                    onPrimary: Colors.white,
+                    shadowColor: Colors.grey,
+                    elevation: 20,
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                      BorderRadius.all(Radius.circular(10)),
+                    )),
+              ),
+            ),
             Spacer(),
             SizedBox(
               width: 140,

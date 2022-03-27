@@ -29,16 +29,16 @@ class _LoginState extends State<Login> {
   Future<String> girisYap(String kAdi, String kSifre) async {
     var url = Uri.parse("http://ufuk.site/omr/kullanici_islemleri/kullanici_giris.php");
     var veri = {
-      "kAdi": kAdi,
-      "kSifre": kSifre,
+      "kullanici_adi": kAdi,
+      "kullanici_sifre": kSifre,
     };
     var cevap = await http.post(url, body: veri);
     var jsonVeri = jsonDecode(cevap.body);
     if(cevap.body.contains("false")) {
       return "false";
     } else if (cevap.body.contains("true")) {
-      girisYapanKullaniciId = (jsonVeri["mesaj"][0]["id"]).toString();
-      girisYapanKullaniciAdi = jsonVeri["mesaj"][0]["kAdi"];
+      girisYapanKullaniciId = (jsonVeri["mesaj"][0]["kullanici_id"]).toString();
+      girisYapanKullaniciAdi = jsonVeri["mesaj"][0]["kullanici_adi"];
       return girisYapanKullaniciAdi;
     }else {
       return "false";
