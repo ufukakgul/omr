@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
@@ -192,6 +191,7 @@ class _TestlerState extends State<Testler> {
                       children: [
                         TextField(
                           controller: eklenenSoruSayisi,
+                          keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             hintText: "Soru Sayısı",
                             hintStyle: TextStyle(color: Colors.black, fontSize: 16),
@@ -212,7 +212,9 @@ class _TestlerState extends State<Testler> {
                               padding: const EdgeInsets.all(8.0),
                               child: ElevatedButton(
                                 onPressed: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=> TestEkle(eklenenSoruSayisi.text)));
+                                  print(eklenenSoruSayisi.text);
+                                  eklenenSoruSayisi.text != "" ?
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=> TestEkle(eklenenSoruSayisi.text,widget.kAdi))):Text("Hata");
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
