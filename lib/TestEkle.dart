@@ -105,12 +105,18 @@ class _TestEkleState extends State<TestEkle> {
                         Icons.add,
                         color: Colors.black,
                       ),
-                      label: Text(
-                        "Tamamla",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16),
+                      label: SizedBox(
+                        width: 80,
+                        height: 50,
+                        child: Center(
+                          child: Text(
+                            "Tamamla",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16),
+                          ),
+                        ),
                       ),
                       style: ElevatedButton.styleFrom(
                           primary: Colors.grey,

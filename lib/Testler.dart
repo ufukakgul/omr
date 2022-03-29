@@ -77,22 +77,26 @@ class _TestlerState extends State<Testler> {
     final double ekranGenisligi = ekranBilgisi.size.width;
     var eklenenSoruSayisi = TextEditingController();
     return Scaffold(
-      floatingActionButton: fabButtonGizle == false ? FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            soruEklemeButonu = true;
-            fabButtonGizle = true;
-          });
-          // Navigator.push(context, MaterialPageRoute(builder: (context) => TestEkle()));
-        },
-        backgroundColor: Color(0xff736e7e),
-        child: Icon(Icons.add),
-      ) : Text(""),
+      floatingActionButton: fabButtonGizle == false
+          ? FloatingActionButton(
+              onPressed: () {
+                setState(() {
+                  soruEklemeButonu = true;
+                  fabButtonGizle = true;
+                });
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => TestEkle()));
+              },
+              backgroundColor: Color(0xff736e7e),
+              child: Icon(Icons.add),
+            )
+          : Text(""),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       bottomNavigationBar: BottomAppBar(
         color: Color(0xff5e4d91),
         shape: CircularNotchedRectangle(), //shape of notch
-        notchMargin: soruEklemeButonu == true ? 0 : 5, //notche margin between floating button and bottom appbar
+        notchMargin: soruEklemeButonu == true
+            ? 0
+            : 5, //notche margin between floating button and bottom appbar
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -183,74 +187,94 @@ class _TestlerState extends State<Testler> {
                           fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                   ),
-                  soruEklemeButonu ?
-                  Padding(
-                    padding: EdgeInsets.only(
-                        top: 10, left: 30, right: 30, bottom: 10),
-                    child: Column(
-                      children: [
-                        TextField(
-                          controller: eklenenSoruSayisi,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            hintText: "Soru Sayısı",
-                            hintStyle: TextStyle(color: Colors.black, fontSize: 16),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10)),
-                              borderSide: BorderSide(color: Colors.white, width: 2),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10)),
-                              borderSide: BorderSide(color: Colors.white, width: 2),
-                            ),
+                  soruEklemeButonu
+                      ? Padding(
+                          padding: EdgeInsets.only(
+                              top: 10, left: 30, right: 30, bottom: 10),
+                          child: Column(
+                            children: [
+                              TextField(
+                                controller: eklenenSoruSayisi,
+                                keyboardType: TextInputType.number,
+                                textInputAction: TextInputAction.done,
+                                autofocus: true,
+                                enabled: true,
+                                showCursor: false,
+                                maxLines: 1,
+                                decoration: InputDecoration(
+                                  hintText: "Soru Sayısı",
+                                  hintStyle: TextStyle(
+                                      color: Colors.black, fontSize: 16),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
+                                    borderSide: BorderSide(
+                                        color: Colors.white, width: 2),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
+                                    borderSide: BorderSide(
+                                        color: Colors.white, width: 2),
+                                  ),
+                                ),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        eklenenSoruSayisi.text != ""
+                                            ? Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        TestEkle(
+                                                            eklenenSoruSayisi
+                                                                .text,
+                                                            widget.kAdi)))
+                                            : Text("Hata");
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text("Ekle",
+                                            style: TextStyle(fontSize: 16)),
+                                      ),
+                                      style: ElevatedButton.styleFrom(
+                                          primary: Color(0xff736e7e),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20)),
+                                          )),
+                                    ),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        soruEklemeButonu = false;
+                                        fabButtonGizle = false;
+                                      });
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text("İptal",
+                                          style: TextStyle(fontSize: 16)),
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                        primary: Color(0xff736e7e),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20)),
+                                        )),
+                                  ),
+                                ],
+                              )
+                            ],
                           ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ElevatedButton(
-                                onPressed: (){
-                                  print(eklenenSoruSayisi.text);
-                                  eklenenSoruSayisi.text != "" ?
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=> TestEkle(eklenenSoruSayisi.text,widget.kAdi))):Text("Hata");
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text("Ekle", style: TextStyle(fontSize: 16)),
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                  primary: Color(0xff736e7e),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                                  )
-                                ),
-                              ),
-                            ),
-                            ElevatedButton(
-                              onPressed: (){
-                                setState(() {
-                                  soruEklemeButonu = false;
-                                  fabButtonGizle = false;
-                                });
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text("İptal", style: TextStyle(fontSize: 16)),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                  primary: Color(0xff736e7e),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                                  )
-                              ),
-                            ),
-                          ],
                         )
-                      ],
-                    ),
-                  ) : Text(""),
+                      : Text(""),
                 ],
               ),
             );

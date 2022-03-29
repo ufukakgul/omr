@@ -5,6 +5,8 @@ import 'package:fluttericon/mfg_labs_icons.dart';
 import 'package:fluttericon/fontelico_icons.dart';
 import 'package:http/http.dart' as http;
 
+import 'Login.dart';
+
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
 
@@ -105,8 +107,8 @@ class _RegisterState extends State<Register> {
       isLoading = false;
     });
     await Future.delayed(Duration(milliseconds: 1200));
-    // Navigator.pushReplacement(
-    //     context, MaterialPageRoute(builder: (context) => LoginPage()));
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => Login()));
   }
 
   Future<void> girilenBilgileriKontrolEt() async {
