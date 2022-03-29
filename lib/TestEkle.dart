@@ -25,17 +25,22 @@ class _TestEkleState extends State<TestEkle> {
         appBar: AppBar(
           backgroundColor: Color(0xff5e4d91).withOpacity(0.8),
           title: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 "Optik Form Okuma Sistemi",
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
-              Text("  --  "),
-              Text(
-                widget.kAdi,
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
+              // Text(
+              //   widget.kAdi,
+              //   style: TextStyle(color: Colors.white, fontSize: 16),
+              // ),
+              // TextButton(onPressed: (){}, child: Text("Tamamla", style: TextStyle(color: Colors.white, fontSize: 16),))
+              IconButton(
+                onPressed: () {},
+                icon: Icon(Icons.add),
+                hoverColor: Colors.white,
+              )
             ],
           ),
           leading: Padding(
@@ -50,27 +55,73 @@ class _TestEkleState extends State<TestEkle> {
             ),
           ),
         ),
-        body: Container(
-          width: ekranGenisligi,
-          height: ekranYuksekligi,
-          child: Column(
-            children: [
-              for(int i = 0; i<=int.parse(widget.eklenenSoruSayisi); i++)
-               Row(
-                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                 children: [
-                 Padding(
-                   padding: const EdgeInsets.all(16.0),
-                   child: Text("${i+1}"),
-                 ),
-                 for(int j = 1; j<=5; j++)
-                   TextButton(onPressed: (){
-                     setState(() {
-                       secilen[i]=j;
-                     });
-                   }, child: Text(secenek[j-1], style: TextStyle(backgroundColor: secilen[i]==j ? Colors.grey : Colors.white),))
-               ],)
-            ],
+        body: SingleChildScrollView(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  for (int i = 0; i < int.parse(widget.eklenenSoruSayisi); i++)
+                    Card(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(20))),
+                      shadowColor: Colors.black,
+                      elevation: 20,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("${i + 1} -",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 14)),
+                            for (int j = 1; j <= 5; j++)
+                              TextButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      secilen[i] = j;
+                                    });
+                                  },
+                                  style: TextButton.styleFrom(
+                                      backgroundColor: secilen[i] == j
+                                          ? Colors.grey
+                                          : Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
+                                          side:
+                                              BorderSide(color: Colors.black))),
+                                  child: Text(
+                                    secenek[j - 1],
+                                    style: TextStyle(color: Colors.black),
+                                  ))
+                          ],
+                        ),
+                      ),
+                    ),
+                  ElevatedButton.icon(
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.add,
+                        color: Colors.black,
+                      ),
+                      label: Text(
+                        "Tamamla",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.grey,
+                          textStyle: TextStyle(color: Colors.black),
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                              side: BorderSide(color: Colors.black)))),
+                ],
+              ),
+            ),
           ),
         ));
   }
