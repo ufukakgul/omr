@@ -1,12 +1,14 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class TestEkle extends StatefulWidget {
-  const TestEkle(this.eklenenSoruSayisi, this.kAdi, {Key? key})
+  const TestEkle(this.eklenenSoruSayisi, this.kAdi, this.kId, {Key? key})
       : super(key: key);
   final String eklenenSoruSayisi;
   final String kAdi;
+  final String kId;
 
   @override
   State<TestEkle> createState() => _TestEkleState();
@@ -16,6 +18,22 @@ class _TestEkleState extends State<TestEkle> {
   var secenek = ["A", "B", "C", "D", "E"];
   var secilen = <int, int>{};
   var cevapAnahtari = <int, String>{};
+
+  Future<String> testEkle(String kullanici_id, String cevap_anahtari) async {
+    var url = Uri.parse("https://ufuk.site/omr/test_islemleri/test_ekle.php");
+    var veri = {
+      "kullanici_id": kullanici_id,
+      "cevap_anahtari": cevap_anahtari,
+    };
+    var cevap = await http.post(url, body: veri);
+    print("Cevap: ${cevap.body}");
+    if(cevap.body.contains("true")) {
+      return cevap.body.toString();
+    } else if (cevap.body.contains("false")) {
+      return cevap.body.toString();
+    } else return cevap.body.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     var ekranBilgisi = MediaQuery.of(context);
@@ -75,8 +93,6 @@ class _TestEkleState extends State<TestEkle> {
                                   onPressed: () {
                                     setState(() {
                                       secilen[i] = j;
-                                      // print(i+1);
-                                      // print(secenek[j-1]);
                                       cevapAnahtari[i+1]=secenek[j-1];
                                     });
                                   },
@@ -99,7 +115,7 @@ class _TestEkleState extends State<TestEkle> {
                     ),
                   ElevatedButton.icon(
                       onPressed: () {
-                        print(cevapAnahtari);
+                        testEkle(widget.kId, cevapAnahtari.values.toString());
                       },
                       icon: Icon(
                         Icons.add,

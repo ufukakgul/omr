@@ -234,7 +234,7 @@ class _TestlerState extends State<Testler> {
                                                         TestEkle(
                                                             eklenenSoruSayisi
                                                                 .text,
-                                                            widget.kAdi)))
+                                                            widget.kAdi, widget.kId)))
                                             : Text("Hata");
                                       },
                                       child: Padding(
