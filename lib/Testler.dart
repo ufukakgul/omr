@@ -21,6 +21,7 @@ class Testler extends StatefulWidget {
 class _TestlerState extends State<Testler> {
   late String girisYapanKullaniciTestId;
   late String girisYapanKullaniciId;
+  late String testSayisi;
   bool soruEklemeButonu = false;
   bool fabButtonGizle = false;
   Future<String> kullanici_adi() async {
@@ -44,7 +45,7 @@ class _TestlerState extends State<Testler> {
         context, MaterialPageRoute(builder: (context) => Login()));
   }
 
-  Future<String> kayitListele(String kullanici_id) async {
+  Future<String> testleriListele(String kullanici_id) async {
     var url =
         Uri.parse("http://ufuk.site/omr/test_islemleri/testleri_listele.php");
     var veri = {
@@ -52,17 +53,18 @@ class _TestlerState extends State<Testler> {
     };
     var cevap = await http.post(url, body: veri);
     var jsonVeri = jsonDecode(cevap.body);
-    if (cevap.body.contains("false")) {
+    if ((jsonVeri["sayi"]).toString() == 0.toString()) {
       return "0";
     } else if (cevap.body.contains("true")) {
-      girisYapanKullaniciId =
-          (jsonVeri["kayitlar"][0]["kullanici_id"]).toString();
+      testSayisi = (jsonVeri["sayi"]).toString();
+      girisYapanKullaniciId = (jsonVeri["kayitlar"][0]["kullanici_id"]).toString();
       girisYapanKullaniciTestId = jsonVeri["kayitlar"][0]["test_id"];
       return "1";
     } else {
       return "Hatalı Giriş";
     }
   }
+
 
   @override
   void initState() {
@@ -150,10 +152,30 @@ class _TestlerState extends State<Testler> {
         ),
       ),
       body: FutureBuilder<String>(
-        future: kayitListele(widget.kId),
+        future: testleriListele(widget.kId),
         builder: (context, snapshot) {
           if (snapshot.data == "1") {
-            return Text("${snapshot.data}");
+            //return Text("${int.parse(testSayisi)}");
+            return ListView(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    shadowColor: Colors.black,
+                    elevation: 5,
+                    child: Column(
+                      children: [
+                        Text(girisYapanKullaniciId),
+                        Text(girisYapanKullaniciTestId),
+                        Text(testSayisi),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            );
           } else if (snapshot.data == "0") {
             return Container(
               width: ekranGenisligi,
@@ -280,7 +302,7 @@ class _TestlerState extends State<Testler> {
             );
           } else {
             return Center(
-              child: Text("---"),
+              child: Text("--"),
             );
           }
         },
