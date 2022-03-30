@@ -13,9 +13,9 @@ class TestEkle extends StatefulWidget {
 }
 
 class _TestEkleState extends State<TestEkle> {
-  int secilenIndex = 0;
   var secenek = ["A", "B", "C", "D", "E"];
   var secilen = <int, int>{};
+  var cevapAnahtari = <int, String>{};
   @override
   Widget build(BuildContext context) {
     var ekranBilgisi = MediaQuery.of(context);
@@ -31,11 +31,6 @@ class _TestEkleState extends State<TestEkle> {
                 "Optik Form Okuma Sistemi",
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
-              // Text(
-              //   widget.kAdi,
-              //   style: TextStyle(color: Colors.white, fontSize: 16),
-              // ),
-              // TextButton(onPressed: (){}, child: Text("Tamamla", style: TextStyle(color: Colors.white, fontSize: 16),))
               IconButton(
                 onPressed: () {},
                 icon: Icon(Icons.add),
@@ -80,6 +75,9 @@ class _TestEkleState extends State<TestEkle> {
                                   onPressed: () {
                                     setState(() {
                                       secilen[i] = j;
+                                      // print(i+1);
+                                      // print(secenek[j-1]);
+                                      cevapAnahtari[i+1]=secenek[j-1];
                                     });
                                   },
                                   style: TextButton.styleFrom(
@@ -100,7 +98,9 @@ class _TestEkleState extends State<TestEkle> {
                       ),
                     ),
                   ElevatedButton.icon(
-                      onPressed: () {},
+                      onPressed: () {
+                        print(cevapAnahtari);
+                      },
                       icon: Icon(
                         Icons.add,
                         color: Colors.black,
