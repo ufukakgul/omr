@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:omr/main.dart';
 
 class TestEkle extends StatefulWidget {
   const TestEkle(this.eklenenSoruSayisi, this.kAdi, this.kId, {Key? key})
@@ -28,11 +29,12 @@ class _TestEkleState extends State<TestEkle> {
     };
     var cevap = await http.post(url, body: veri);
     print("Cevap: ${cevap.body}");
-    if(cevap.body.contains("true")) {
+    if (cevap.body.contains("true")) {
       return cevap.body.toString();
     } else if (cevap.body.contains("false")) {
       return cevap.body.toString();
-    } else return cevap.body.toString();
+    } else
+      return cevap.body.toString();
   }
 
   @override
@@ -80,11 +82,11 @@ class _TestEkleState extends State<TestEkle> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(20))),
                       shadowColor: Colors.black,
-                      elevation: 20,
+                      elevation: 6,
                       child: Padding(
                         padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Text("${i + 1} -",
                                 style: TextStyle(
@@ -94,7 +96,7 @@ class _TestEkleState extends State<TestEkle> {
                                   onPressed: () {
                                     setState(() {
                                       secilen[i] = j;
-                                      cevapAnahtari[i+1]=secenek[j-1];
+                                      cevapAnahtari[i + 1] = secenek[j - 1];
                                       eklenenSoruSayac++;
                                     });
                                   },
@@ -115,39 +117,96 @@ class _TestEkleState extends State<TestEkle> {
                         ),
                       ),
                     ),
-                  ElevatedButton.icon(
-                      onPressed: () {
-                        if(eklenenSoruSayac<int.parse(widget.eklenenSoruSayisi)){
-
-                        }else{
-                          testEkle(widget.kId, cevapAnahtari.values.toString());
-                        }
-
-                      },
-                      icon: Icon(
-                        Icons.add,
-                        color: Colors.black,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: ElevatedButton.icon(
+                            onPressed: () async {
+                              if (cevapAnahtari.length <
+                                  int.parse(widget.eklenenSoruSayisi)) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                        content: Text(
+                                  "Tüm Şıkları İşaretleyin",
+                                )));
+                              } else {
+                                testEkle(
+                                    widget.kId, cevapAnahtari.values.toString());
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                        content: Text(
+                                  "Cevaplarınız Kaydedildi",
+                                )));
+                                await Future.delayed(Duration(seconds: 2));
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => MyApp()));
+                              }
+                            },
+                            icon: Icon(
+                              Icons.add,
+                              color: Colors.black,
+                            ),
+                            label: SizedBox(
+                              height: 40,
+                              width: 80,
+                              child: Center(
+                                child: Text(
+                                  "Tamamla",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16),
+                                ),
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                                primary: Colors.grey,
+                                textStyle: TextStyle(color: Colors.black),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
+                                    side: BorderSide(color: Colors.black)))),
                       ),
-                      label: SizedBox(
-                        width: 80,
-                        height: 50,
-                        child: Center(
-                          child: Text(
-                            "Tamamla",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16),
-                          ),
-                        ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                          primary: Colors.grey,
-                          textStyle: TextStyle(color: Colors.black),
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                              side: BorderSide(color: Colors.black)))),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: ElevatedButton.icon(
+                            onPressed: () {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MyApp()));
+                            },
+                            icon: Icon(
+                              Icons.arrow_back_ios_rounded,
+                              color: Colors.black,
+                            ),
+                            label: SizedBox(
+                              height: 40,
+                              width: 80,
+                              child: Center(
+                                child: Text(
+                                  "Geri Dön",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16),
+                                ),
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                                primary: Colors.grey,
+                                textStyle: TextStyle(color: Colors.black),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
+                                    side: BorderSide(color: Colors.black)))),
+                      )
+                    ],
+                  ),
                 ],
               ),
             ),
