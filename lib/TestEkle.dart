@@ -18,6 +18,7 @@ class _TestEkleState extends State<TestEkle> {
   var secenek = ["A", "B", "C", "D", "E"];
   var secilen = <int, int>{};
   var cevapAnahtari = <int, String>{};
+  int eklenenSoruSayac = 0;
 
   Future<String> testEkle(String kullanici_id, String cevap_anahtari) async {
     var url = Uri.parse("https://ufuk.site/omr/test_islemleri/test_ekle.php");
@@ -94,6 +95,7 @@ class _TestEkleState extends State<TestEkle> {
                                     setState(() {
                                       secilen[i] = j;
                                       cevapAnahtari[i+1]=secenek[j-1];
+                                      eklenenSoruSayac++;
                                     });
                                   },
                                   style: TextButton.styleFrom(
@@ -115,7 +117,12 @@ class _TestEkleState extends State<TestEkle> {
                     ),
                   ElevatedButton.icon(
                       onPressed: () {
-                        testEkle(widget.kId, cevapAnahtari.values.toString());
+                        if(eklenenSoruSayac<int.parse(widget.eklenenSoruSayisi)){
+
+                        }else{
+                          testEkle(widget.kId, cevapAnahtari.values.toString());
+                        }
+
                       },
                       icon: Icon(
                         Icons.add,
