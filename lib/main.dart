@@ -7,7 +7,7 @@ import 'package:omr/Testler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   runApp(MyApp());
 }
 class MyApp extends StatelessWidget {
