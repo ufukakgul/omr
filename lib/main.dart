@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:omr/KullaniciIslemleri/Login.dart';
-import 'package:omr/Testler.dart';
+import 'package:omr/TestleriListele.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
         builder: (context, snapshot){
           if(snapshot.hasData){
             bool gecisIzni = snapshot.data!;
-            return gecisIzni ? Testler(kAdi!, kId!) : Login();
+            return gecisIzni ? TestleriListele(kAdi!, kId!) : Login();
           }else{
             return Container(
             );

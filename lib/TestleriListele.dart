@@ -5,25 +5,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:omr/Dbo/Testler.dart';
+import 'package:omr/Dbo/TestlerCevap.dart';
 import 'package:omr/KullaniciIslemleri/Login.dart';
 import 'package:omr/TestEkle.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-class Testler extends StatefulWidget {
-  const Testler(this.kAdi, this.kId, {Key? key}) : super(key: key);
+class TestleriListele extends StatefulWidget {
+  const TestleriListele(this.kAdi, this.kId, {Key? key}) : super(key: key);
   final String kAdi;
   final String kId;
   @override
-  State<Testler> createState() => _TestlerState();
+  State<TestleriListele> createState() => _TestleriListeleState();
 }
 
-class _TestlerState extends State<Testler> {
+class _TestleriListeleState extends State<TestleriListele> {
   late String girisYapanKullaniciTestId;
   late String girisYapanKullaniciId;
-  late String testSayisi;
+  late int testSayisi;
   bool soruEklemeButonu = false;
   bool fabButtonGizle = false;
+  late int sayac;
+  late String cevap_anahtari;
+  late int test_id;
+
   Future<String> kullanici_adi() async {
     var sp = await SharedPreferences.getInstance();
     String? kAdi = sp.getString("kullanici_adi");
@@ -45,30 +51,46 @@ class _TestlerState extends State<Testler> {
         context, MaterialPageRoute(builder: (context) => Login()));
   }
 
-  Future<String> testleriListele(String kullanici_id) async {
-    var url =
-        Uri.parse("http://ufuk.site/omr/test_islemleri/testleri_listele.php");
-    var veri = {
-      "kullanici_id": kullanici_id,
-    };
-    var cevap = await http.post(url, body: veri);
-    var jsonVeri = jsonDecode(cevap.body);
-    if ((jsonVeri["sayi"]).toString() == 0.toString()) {
-      return "0";
-    } else if (cevap.body.contains("true")) {
-      testSayisi = (jsonVeri["sayi"]).toString();
-      girisYapanKullaniciId =
-          (jsonVeri["kayitlar"][0]["kullanici_id"]).toString();
-      girisYapanKullaniciTestId = jsonVeri["kayitlar"][0]["test_id"];
-      return "1";
-    } else {
-      return "Hatalı Giriş";
-    }
+  List<Testler> parseTestlerCevap(String cevap){
+    return TestlerCevap.fromJson(json.decode(cevap)).testlerListesi;
   }
+
+  int toplamTestSayisi (String cevap){
+    return TestlerCevap.fromJson(json.decode(cevap)).toplam_test_sayisi;
+  }
+
+  Future<int> toplamTest(String kullanici_id) async {
+    var url = Uri.parse("http://ufuk.site/omr/test_islemleri/testleri_listele.php");
+    var veri = {"kullanici_id": kullanici_id,};
+    var cevap = await http.post(url, body: veri);
+    return toplamTestSayisi(cevap.body);
+  }
+
+  Future<List<Testler>> testleriListele(String kullanici_id) async {
+    var url = Uri.parse("http://ufuk.site/omr/test_islemleri/testleri_listele.php");
+    var veri = {"kullanici_id": kullanici_id,};
+    var cevap = await http.post(url, body: veri);
+    return parseTestlerCevap(cevap.body);
+  }
+
+  Future<void> toplamTestSayisiF() async {
+    testSayisi = await toplamTest(widget.kId);
+  }
+
+  // Future<void> testleriGoster() async {
+  //   var liste = await testleriListele(widget.kId);
+  //   for (var k in liste){
+  //     print(k.cevap_anahtari);
+  //   }
+  //   // print(liste);
+  // }
+
 
   @override
   void initState() {
     // TODO: implement initState
+    toplamTestSayisiF();
+    //testleriGoster();
     super.initState();
   }
 
@@ -266,31 +288,44 @@ class _TestlerState extends State<Testler> {
           ),
         ),
       ),
-      body: FutureBuilder<String>(
+      body: FutureBuilder<List<Testler>>(
         future: testleriListele(widget.kId),
         builder: (context, snapshot) {
-          if (snapshot.data == "1") {
+          if (snapshot.hasData) {
+            List<Testler> testlerListesi = snapshot.data!;
+            sayac = testlerListesi[0].sayac;
+            cevap_anahtari = testlerListesi[0].cevap_anahtari;
+            test_id = int.parse(testlerListesi[0].test_id);
             return ListView(
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(20))),
-                    shadowColor: Colors.black,
-                    elevation: 5,
-                    child: Column(
-                      children: [
-                        Text(girisYapanKullaniciId),
-                        Text(girisYapanKullaniciTestId),
-                        Text(testSayisi),
-                      ],
-                    ),
+                  child: Column(
+                    children: [
+                      for (int i = 0; i < testSayisi; i++)
+                      Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(20))),
+                        shadowColor: Colors.black,
+                        elevation: 5,
+                        child: Column(
+                          children: [
+                            Text("${testlerListesi[i].sayac}"),
+                            Text("${testlerListesi[i].cevap_anahtari}"),
+                            Text("${testlerListesi[i].cevap_anahtari.split(",")}"),
+                            Text("${testlerListesi[i].test_id}"),
+                            // Text("$sayac"),
+                            // Text(cevap_anahtari),
+                            // Text("$test_id"),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 )
               ],
             );
-          } else if (snapshot.data == "0") {
+          } else {
             return Container(
               width: ekranGenisligi,
               height: ekranYuksekligi,
@@ -325,10 +360,6 @@ class _TestlerState extends State<Testler> {
                   ),
                 ],
               ),
-            );
-          } else {
-            return Center(
-              child: Text("--"),
             );
           }
         },
