@@ -23,12 +23,14 @@ class TestleriListele extends StatefulWidget {
 class _TestleriListeleState extends State<TestleriListele> {
   late String girisYapanKullaniciTestId;
   late String girisYapanKullaniciId;
-  late int testSayisi;
   bool soruEklemeButonu = false;
   bool fabButtonGizle = false;
-  late int sayac;
-  late String cevap_anahtari;
-  late int test_id;
+  var sayac = <int>[];
+  var testId = <int>[];
+  var cevap_anahtari = <String>[];
+  var soruSayisi = <int>[];
+  int testSayisi = 1;
+  bool durum = false;
 
   Future<String> kullanici_adi() async {
     var sp = await SharedPreferences.getInstance();
@@ -51,19 +53,12 @@ class _TestleriListeleState extends State<TestleriListele> {
         context, MaterialPageRoute(builder: (context) => Login()));
   }
 
-  List<Testler> parseTestlerCevap(String cevap){
-    return TestlerCevap.fromJson(json.decode(cevap)).testlerListesi;
-  }
-
-  int toplamTestSayisi (String cevap){
-    return TestlerCevap.fromJson(json.decode(cevap)).toplam_test_sayisi;
-  }
-
-  Future<int> toplamTest(String kullanici_id) async {
-    var url = Uri.parse("http://ufuk.site/omr/test_islemleri/testleri_listele.php");
-    var veri = {"kullanici_id": kullanici_id,};
-    var cevap = await http.post(url, body: veri);
-    return toplamTestSayisi(cevap.body);
+  List<Testler> parseTestlerCevap(String cevap) {
+    var jsonVeri = json.decode(cevap);
+    var testlerCevap = TestlerCevap.fromJson(jsonVeri);
+    List<Testler> testlerListesi = testlerCevap.testlerListesi;
+    durum =testlerCevap.durum;
+    return testlerListesi;
   }
 
   Future<List<Testler>> testleriListele(String kullanici_id) async {
@@ -73,24 +68,24 @@ class _TestleriListeleState extends State<TestleriListele> {
     return parseTestlerCevap(cevap.body);
   }
 
-  Future<void> toplamTestSayisiF() async {
-    testSayisi = await toplamTest(widget.kId);
+  Future<void> testIslemleri() async {
+    var liste = await testleriListele(widget.kId);
+    for (var k in liste) {
+      sayac.add(k.sayac);
+      testId.add(int.parse(k.test_id));
+      cevap_anahtari.add(k.cevap_anahtari);
+      soruSayisi.add(k.cevap_anahtari.length ~/ 3);
+    }
+    testSayisi = sayac.last;
   }
-
-  // Future<void> testleriGoster() async {
-  //   var liste = await testleriListele(widget.kId);
-  //   for (var k in liste){
-  //     print(k.cevap_anahtari);
-  //   }
-  //   // print(liste);
-  // }
-
 
   @override
   void initState() {
+    testIslemleri();
+    print("-----");
+    print(sayac);
+    print("-----");
     // TODO: implement initState
-    toplamTestSayisiF();
-    //testleriGoster();
     super.initState();
   }
 
@@ -250,7 +245,10 @@ class _TestleriListeleState extends State<TestleriListele> {
                     onPressed: () {
                       cikisYap();
                     },
-                    icon: Icon(Icons.exit_to_app_rounded, color: Colors.white,),
+                    icon: Icon(
+                      Icons.exit_to_app_rounded,
+                      color: Colors.white,
+                    ),
                     label: Text("Çıkış Yap",
                         style: TextStyle(color: Colors.white)),
                   ),
@@ -291,11 +289,7 @@ class _TestleriListeleState extends State<TestleriListele> {
       body: FutureBuilder<List<Testler>>(
         future: testleriListele(widget.kId),
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            List<Testler> testlerListesi = snapshot.data!;
-            sayac = testlerListesi[0].sayac;
-            cevap_anahtari = testlerListesi[0].cevap_anahtari;
-            test_id = int.parse(testlerListesi[0].test_id);
+          if (durum) {
             return ListView(
               children: [
                 Padding(
@@ -303,23 +297,63 @@ class _TestleriListeleState extends State<TestleriListele> {
                   child: Column(
                     children: [
                       for (int i = 0; i < testSayisi; i++)
-                      Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(20))),
-                        shadowColor: Colors.black,
-                        elevation: 5,
-                        child: Column(
-                          children: [
-                            Text("${testlerListesi[i].sayac}"),
-                            Text("${testlerListesi[i].cevap_anahtari}"),
-                            Text("${testlerListesi[i].cevap_anahtari.split(",")}"),
-                            Text("${testlerListesi[i].test_id}"),
-                            // Text("$sayac"),
-                            // Text(cevap_anahtari),
-                            // Text("$test_id"),
-                          ],
+                        Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5))),
+                          shadowColor: Colors.black,
+                          elevation: 5,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 8.0, top: 4),
+                               //child: Text("Test ID: $durum"),
+                               child: Text("Test ID: ${testId[i]}"),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: Text("Soru Sayısı: ${soruSayisi[i]}"),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 8.0, right: 8),
+                                    child: ElevatedButton(
+                                      onPressed: () {},
+                                      child: Text("Düzenle", style: TextStyle(color: Colors.grey.shade600),),
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Colors.white,
+                                          side:
+                                              BorderSide(color: Colors.grey)),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 8),
+                                    child: ElevatedButton(
+                                      onPressed: () {},
+                                      child: Text("Sınav Tara", style: TextStyle(color: Colors.grey.shade600),),
+                                      style: ElevatedButton.styleFrom(
+                                          primary: Colors.white,
+                                          side:
+                                              BorderSide(color: Colors.grey)),
+                                    ),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {},
+                                    child: Text("Sil", style: TextStyle(color: Colors.grey.shade600),),
+                                    style: ElevatedButton.styleFrom(
+                                        primary: Colors.white,
+                                        side: BorderSide(color: Colors.grey)),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
                     ],
                   ),
                 )
