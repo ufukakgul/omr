@@ -76,15 +76,12 @@ class _TestleriListeleState extends State<TestleriListele> {
       cevap_anahtari.add(k.cevap_anahtari);
       soruSayisi.add(k.cevap_anahtari.length ~/ 3);
     }
-    testSayisi = sayac.last;
+    durum ? testSayisi = sayac.last : 0;
   }
 
   @override
   void initState() {
     testIslemleri();
-    print("-----");
-    print(sayac);
-    print("-----");
     // TODO: implement initState
     super.initState();
   }
@@ -289,7 +286,43 @@ class _TestleriListeleState extends State<TestleriListele> {
       body: FutureBuilder<List<Testler>>(
         future: testleriListele(widget.kId),
         builder: (context, snapshot) {
-          if (durum) {
+          if (durum==false) {
+            return Container(
+              width: ekranGenisligi,
+              height: ekranYuksekligi,
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomRight,
+                    stops: const [
+                      0.1,
+                      0.2,
+                      0.8,
+                      0.9,
+                    ],
+                    colors: [
+                      Color(0xff5e4d91).withOpacity(0.7),
+                      Color(0xff5e4d91).withOpacity(0.6),
+                      Color(0xff5e4d91).withOpacity(0.2),
+                      Color(0xff5e4d91).withOpacity(0.1),
+                    ],
+                  )),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 30, right: 30),
+                    child: Text(
+                      "Testiniz bulunmuyor.\nAşağıdaki butona basarak test ekleyebilirsiniz.",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.robotoMono(
+                          fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          } else {
             return ListView(
               children: [
                 Padding(
@@ -300,7 +333,7 @@ class _TestleriListeleState extends State<TestleriListele> {
                         Card(
                           shape: RoundedRectangleBorder(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(5))),
+                              BorderRadius.all(Radius.circular(5))),
                           shadowColor: Colors.black,
                           elevation: 5,
                           child: Column(
@@ -308,9 +341,9 @@ class _TestleriListeleState extends State<TestleriListele> {
                             children: [
                               Padding(
                                 padding:
-                                    const EdgeInsets.only(left: 8.0, top: 4),
-                               //child: Text("Test ID: $durum"),
-                               child: Text("Test ID: ${testId[i]}"),
+                                const EdgeInsets.only(left: 8.0, top: 4),
+                                //child: Text("Test ID: $durum"),
+                                child: Text("Test ID: ${testId[i]}"),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(left: 8.0),
@@ -326,9 +359,9 @@ class _TestleriListeleState extends State<TestleriListele> {
                                       onPressed: () {},
                                       child: Text("Düzenle", style: TextStyle(color: Colors.grey.shade600),),
                                       style: ElevatedButton.styleFrom(
-                                        primary: Colors.white,
+                                          primary: Colors.white,
                                           side:
-                                              BorderSide(color: Colors.grey)),
+                                          BorderSide(color: Colors.grey)),
                                     ),
                                   ),
                                   Padding(
@@ -339,7 +372,7 @@ class _TestleriListeleState extends State<TestleriListele> {
                                       style: ElevatedButton.styleFrom(
                                           primary: Colors.white,
                                           side:
-                                              BorderSide(color: Colors.grey)),
+                                          BorderSide(color: Colors.grey)),
                                     ),
                                   ),
                                   ElevatedButton(
@@ -358,42 +391,6 @@ class _TestleriListeleState extends State<TestleriListele> {
                   ),
                 )
               ],
-            );
-          } else {
-            return Container(
-              width: ekranGenisligi,
-              height: ekranYuksekligi,
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomRight,
-                stops: const [
-                  0.1,
-                  0.2,
-                  0.8,
-                  0.9,
-                ],
-                colors: [
-                  Color(0xff5e4d91).withOpacity(0.7),
-                  Color(0xff5e4d91).withOpacity(0.6),
-                  Color(0xff5e4d91).withOpacity(0.2),
-                  Color(0xff5e4d91).withOpacity(0.1),
-                ],
-              )),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 30, right: 30),
-                    child: Text(
-                      "Testiniz bulunmuyor.\nAşağıdaki butona basarak test ekleyebilirsiniz.",
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.robotoMono(
-                          fontWeight: FontWeight.bold, fontSize: 16),
-                    ),
-                  ),
-                ],
-              ),
             );
           }
         },
