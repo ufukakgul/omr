@@ -72,6 +72,16 @@ class _TestleriListeleState extends State<TestleriListele> {
     return parseTestlerCevap(cevap.body);
   }
 
+  Future<String> testSil(String kullanici_id, String test_id) async {
+    var url = Uri.parse("http://ufuk.site/omr/test_islemleri/test_sil.php");
+    var veri = {
+      "kullanici_id": kullanici_id,
+      "test_id": test_id,
+    };
+    var cevap = await http.post(url, body: veri);
+    return cevap.body;
+  }
+
   Future<void> testIslemleri() async {
     var liste = await testleriListele(widget.kId);
     for (var k in liste) {
@@ -106,7 +116,11 @@ class _TestleriListeleState extends State<TestleriListele> {
                 "Optik Form Okuma Sistemi",
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
-              IconButton(onPressed: () {cikisYap();}, icon: Icon(Icons.logout))
+              IconButton(
+                  onPressed: () {
+                    cikisYap();
+                  },
+                  icon: Icon(Icons.logout))
             ],
           ),
           leading: Padding(
@@ -192,7 +206,6 @@ class _TestleriListeleState extends State<TestleriListele> {
                                   Padding(
                                     padding: const EdgeInsets.only(
                                         left: 8.0, top: 4),
-                                    //child: Text("Test ID: $durum"),
                                     child: Text("Test ID: ${testId[i]}"),
                                   ),
                                   Padding(
@@ -236,7 +249,23 @@ class _TestleriListeleState extends State<TestleriListele> {
                                         ),
                                       ),
                                       ElevatedButton(
-                                        onPressed: () {},
+                                        onPressed: () async {
+                                          testSil(widget.kId,
+                                                  testId[i].toString())
+                                              .then((value) => value
+                                                      .contains("true")
+                                                  ? ScaffoldMessenger.of(context)
+                                                      .showSnackBar(SnackBar(
+                                                          content: Text(
+                                                              "Kayıt Silindi")))
+                                                  : ScaffoldMessenger.of(context)
+                                                      .showSnackBar(SnackBar(
+                                                          content: Text(
+                                                              "Kayıt Silinemedi"))));
+                                          await Future.delayed(
+                                              Duration(seconds: 3));
+                                          setState(() {});
+                                        },
                                         child: Text(
                                           "Sil",
                                           style: TextStyle(

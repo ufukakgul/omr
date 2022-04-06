@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:omr/TestleriListele.dart';
 import 'package:omr/main.dart';
 
 class TestEkle extends StatefulWidget {
@@ -139,7 +140,7 @@ class _TestEkleState extends State<TestEkle> {
                                         content: Text(
                                   "Cevaplarınız Kaydedildi",
                                 )));
-                                await Future.delayed(Duration(seconds: 2));
+                                await Future.delayed(Duration(seconds: 5));
                                 Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
@@ -178,7 +179,7 @@ class _TestEkleState extends State<TestEkle> {
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => MyApp()));
+                                      builder: (context) => TestleriListele(widget.kAdi, widget.kId)));
                             },
                             icon: Icon(
                               Icons.arrow_back_ios_rounded,
