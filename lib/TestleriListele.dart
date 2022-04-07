@@ -9,7 +9,6 @@ import 'package:omr/KullaniciIslemleri/Login.dart';
 import 'package:omr/TestEkle.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:circular_menu/circular_menu.dart';
-import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:fluttericon/linearicons_free_icons.dart';
 import 'package:http/http.dart' as http;
 
@@ -24,12 +23,6 @@ class TestleriListele extends StatefulWidget {
 class _TestleriListeleState extends State<TestleriListele> {
   late String girisYapanKullaniciTestId;
   late String girisYapanKullaniciId;
-  bool soruEklemeButonu = false;
-  bool fabButtonGizle = false;
-  var sayac = <int>[];
-  var testId = <int>[];
-  var cevap_anahtari = <String>[];
-  var soruSayisi = <int>[];
   int testSayisi = 1;
   bool durum = false;
 
@@ -59,6 +52,7 @@ class _TestleriListeleState extends State<TestleriListele> {
     var testlerCevap = TestlerCevap.fromJson(jsonVeri);
     List<Testler> testlerListesi = testlerCevap.testlerListesi;
     durum = testlerCevap.durum;
+    testSayisi = testlerCevap.toplam_test_sayisi;
     return testlerListesi;
   }
 
@@ -82,20 +76,8 @@ class _TestleriListeleState extends State<TestleriListele> {
     return cevap.body;
   }
 
-  Future<void> testIslemleri() async {
-    var liste = await testleriListele(widget.kId);
-    for (var k in liste) {
-      sayac.add(k.sayac);
-      testId.add(int.parse(k.test_id));
-      cevap_anahtari.add(k.cevap_anahtari);
-      soruSayisi.add(k.cevap_anahtari.length ~/ 3);
-    }
-    durum ? testSayisi = sayac.last : 0;
-  }
-
   @override
   void initState() {
-    testIslemleri();
     // TODO: implement initState
     super.initState();
   }
@@ -150,7 +132,7 @@ class _TestleriListeleState extends State<TestleriListele> {
           backgroundWidget: FutureBuilder<List<Testler>>(
             future: testleriListele(widget.kId),
             builder: (context, snapshot) {
-              if (durum == false) {
+              if (durum == false && snapshot.hasData) {
                 return Container(
                   width: ekranGenisligi,
                   height: ekranYuksekligi,
@@ -186,7 +168,8 @@ class _TestleriListeleState extends State<TestleriListele> {
                     ],
                   ),
                 );
-              } else {
+              } else if (snapshot.hasData && durum == true) {
+                List<Testler> testListesi = snapshot.data!;
                 return ListView(
                   children: [
                     Padding(
@@ -206,12 +189,13 @@ class _TestleriListeleState extends State<TestleriListele> {
                                   Padding(
                                     padding: const EdgeInsets.only(
                                         left: 8.0, top: 4),
-                                    child: Text("Test ID: ${testId[i]}"),
+                                    child: Text(
+                                        "Test ID: ${testListesi[i].test_id}"),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 8.0),
-                                    child:
-                                        Text("Soru Sayısı: ${soruSayisi[i]}"),
+                                    child: Text(
+                                        "Soru Sayısı: ${testListesi[i].cevap_anahtari.length ~/ 3}"),
                                   ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
@@ -250,8 +234,11 @@ class _TestleriListeleState extends State<TestleriListele> {
                                       ),
                                       ElevatedButton(
                                         onPressed: () async {
-                                          testSil(widget.kId,
-                                                  testId[i].toString())
+                                          testSil(
+                                                  widget.kId,
+                                                  testListesi[i]
+                                                      .test_id
+                                                      .toString())
                                               .then((value) => value
                                                       .contains("true")
                                                   ? ScaffoldMessenger.of(context)
@@ -260,11 +247,17 @@ class _TestleriListeleState extends State<TestleriListele> {
                                                               "Kayıt Silindi")))
                                                   : ScaffoldMessenger.of(context)
                                                       .showSnackBar(SnackBar(
-                                                          content: Text(
-                                                              "Kayıt Silinemedi"))));
+                                                          content:
+                                                              Text("Kayıt Silinemedi"))));
                                           await Future.delayed(
                                               Duration(seconds: 3));
-                                          setState(() {});
+                                          Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      TestleriListele(
+                                                          widget.kAdi,
+                                                          widget.kId)));
                                         },
                                         child: Text(
                                           "Sil",
@@ -286,6 +279,8 @@ class _TestleriListeleState extends State<TestleriListele> {
                     )
                   ],
                 );
+              } else {
+                return Center(child: CircularProgressIndicator());
               }
             },
           ),
@@ -395,11 +390,12 @@ class _TestleriListeleState extends State<TestleriListele> {
                                 ),
                                 ElevatedButton(
                                   onPressed: () {
-                                    setState(() {
-                                      soruEklemeButonu = false;
-                                      fabButtonGizle = false;
-                                    });
-                                    Navigator.pop(context);
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                TestleriListele(
+                                                    widget.kAdi, widget.kId)));
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
