@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:omr/TestleriListele.dart';
@@ -21,6 +23,7 @@ class _TestEkleState extends State<TestEkle> {
   var secilen = <int, int>{};
   var cevapAnahtari = <int, String>{};
   int eklenenSoruSayac = 0;
+  var siralanmisCevapAnahtari;
 
   Future<String> testEkle(String kullanici_id, String cevap_anahtari) async {
     var url = Uri.parse("https://ufuk.site/omr/test_islemleri/test_ekle.php");
@@ -98,6 +101,7 @@ class _TestEkleState extends State<TestEkle> {
                                     setState(() {
                                       secilen[i] = j;
                                       cevapAnahtari[i + 1] = secenek[j - 1];
+                                      siralanmisCevapAnahtari = SplayTreeMap<int, String>.from(cevapAnahtari);
                                       eklenenSoruSayac++;
                                     });
                                   },
@@ -134,7 +138,7 @@ class _TestEkleState extends State<TestEkle> {
                                 )));
                               } else {
                                 testEkle(
-                                    widget.kId, cevapAnahtari.values.toString());
+                                    widget.kId, siralanmisCevapAnahtari.values.toString());
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(
                                         content: Text(
