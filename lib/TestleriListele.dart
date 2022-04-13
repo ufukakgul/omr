@@ -120,7 +120,7 @@ class _TestleriListeleState extends State<TestleriListele> {
         body: CircularMenu(
           alignment: Alignment.bottomCenter,
           radius: 90,
-          toggleButtonMargin: 20.0,
+          toggleButtonMargin: 5.0,
           toggleButtonBoxShadow: [
             BoxShadow(
               color: Color(0xff927898),
@@ -417,6 +417,11 @@ class _TestleriListeleState extends State<TestleriListele> {
                 }),
             CircularMenuItem(
                 icon: Icons.camera_alt_outlined,
+                //margin: 30.0,
+                color: Color(0xff927898),
+                onTap: () {}),
+            CircularMenuItem(
+                icon: Icons.upload,
                 margin: 30.0,
                 color: Color(0xff927898),
                 onTap: () {}),
