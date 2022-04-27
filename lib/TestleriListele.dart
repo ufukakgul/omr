@@ -1,16 +1,21 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_new
 
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:omr/Dbo/Testler.dart';
 import 'package:omr/Dbo/TestlerCevap.dart';
+import 'package:omr/UploadPic.dart';
 import 'package:omr/KullaniciIslemleri/Login.dart';
 import 'package:omr/TestEkle.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:circular_menu/circular_menu.dart';
 import 'package:fluttericon/linearicons_free_icons.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+
+
 
 class TestleriListele extends StatefulWidget {
   const TestleriListele(this.kAdi, this.kId, {Key? key}) : super(key: key);
@@ -25,6 +30,34 @@ class _TestleriListeleState extends State<TestleriListele> {
   late String girisYapanKullaniciId;
   int testSayisi = 1;
   bool durum = false;
+  File? _image;
+  final picker = ImagePicker();
+
+
+  Future fromGallery() async{
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      if(pickedFile != null){
+        _image = File(pickedFile.path);
+        Navigator.push(this.context, MaterialPageRoute(builder: (context) => UploadPic(_image)));
+      }else {
+        print('No image selected.');
+      }
+    });
+  }
+
+  Future fromCamera() async{
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+    setState(() {
+      if(pickedFile != null){
+        _image = File(pickedFile.path);
+        Navigator.push(this.context, MaterialPageRoute(builder: (context) => UploadPic(_image)));
+      }else {
+        print('No image selected.');
+      }
+    });
+  }
+
 
   Future<String> kullanici_adi() async {
     var sp = await SharedPreferences.getInstance();
@@ -44,7 +77,7 @@ class _TestleriListeleState extends State<TestleriListele> {
     sp.remove("kullanici_adi");
     sp.remove("kullanici_id");
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => Login()));
+        this.context, MaterialPageRoute(builder: (context) => Login()));
   }
 
   List<Testler> parseTestlerCevap(String cevap) {
@@ -419,13 +452,18 @@ class _TestleriListeleState extends State<TestleriListele> {
                 icon: Icons.camera_alt_outlined,
                 //margin: 30.0,
                 color: Color(0xff927898),
-                onTap: () {}),
+                onTap: () {
+                  fromCamera();
+                }),
             CircularMenuItem(
                 icon: Icons.upload,
                 margin: 30.0,
                 color: Color(0xff927898),
-                onTap: () {}),
+                onTap: () {
+                  fromGallery();
+                }),
           ],
-        ));
+        ),
+    );
   }
 }
