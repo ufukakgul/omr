@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:async/async.dart';
+import 'package:omr/main.dart';
 import 'package:path/path.dart';
 import 'package:http/http.dart' as http;
 
@@ -21,7 +22,6 @@ class UploadPic extends StatefulWidget {
 class _UploadPicState extends State<UploadPic> {
   var icerik;
   var body = <String, dynamic>{};
-  var cevaplar = <String>[];
 
   Upload(File imageFile) async {
     var stream = http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
@@ -37,7 +37,6 @@ class _UploadPicState extends State<UploadPic> {
     print(response.statusCode);
     response.stream.transform(utf8.decoder).listen((value) {
       body = json.decode(value);
-      cevaplar.add(body.values.toString());
       print(value);
     });
   }
@@ -97,135 +96,153 @@ class _UploadPicState extends State<UploadPic> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Container(
-                    width: ekranGenisligi / 2,
-                    child: widget._image != null
-                        ? Image.file(
-                            widget._image!,
-                            fit: BoxFit.contain,
-                          )
-                        : Text("no image"),
-                  ),
-                  Text("\n"),
-                  Text(
-                    body.values.join(" - "),
-                    style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500),
+                  Column(
+                    children: [
+                      Container(
+                        height: ekranYuksekligi/2,
+                        width: ekranGenisligi / 2,
+                        child: widget._image != null
+                            ? Image.file(
+                          widget._image!,
+                          fit: BoxFit.contain,
+                        )
+                            : Text("no image"),
+                      ),
+                      Text("\n"),
+                      Text(
+                        body.values.join(" | "),
+                        style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ],
                   ),
                   Expanded(
-                     child: Container(
-                       width: ekranGenisligi,
-                       decoration: BoxDecoration(
-                           gradient: LinearGradient(
-                             begin: Alignment.topRight,
-                             end: Alignment.bottomRight,
-                             stops: const [
-                               0.3,
-                               0.4,
-                               0.8,
-                               0.9,
-                             ],
-                             colors: [
-                               Color(0xff5e4d91).withOpacity(0.1),
-                               Color(0xff5e4d91).withOpacity(0.2),
-                               Color(0xff5e4d91).withOpacity(0.6),
-                               Color(0xff5e4d91).withOpacity(0.7),
-                             ],
-                           ),
+                    child: Container(
+                      width: ekranGenisligi,
+                      height: ekranYuksekligi/2,
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topRight,
+                            end: Alignment.bottomRight,
+                            stops: const [
+                              0.3,
+                              0.4,
+                              0.8,
+                              0.9,
+                            ],
+                            colors: [
+                              Color(0xff5e4d91).withOpacity(0.1),
+                              Color(0xff5e4d91).withOpacity(0.2),
+                              Color(0xff5e4d91).withOpacity(0.6),
+                              Color(0xff5e4d91).withOpacity(0.7),
+                            ],
+                          ),
                           // color: Colors.white.withOpacity(0.4),
-                           borderRadius: BorderRadius.only(
-                               topLeft: Radius.circular(100),
-                               topRight: Radius.circular(100))),
-                       child: Column(
-                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                         children: [
-                                   widget._image != null
-                                       ? ElevatedButton.icon(
-                                     onPressed: () {
-                                       print(cevaplar);
-                                     },
-                                     icon: Icon(
-                                       Icons.save,
-                                       color: Colors.black,
-                                     ),
-                                     label: Text(
-                                       "Onayla",
-                                       style: GoogleFonts.robotoMono(
-                                           color: Colors.black,
-                                           fontWeight: FontWeight.bold,
-                                           fontSize: 14),
-                                     ),
-                                     style: ElevatedButton.styleFrom(
-                                       fixedSize: Size(ekranGenisligi/3.2, 50),
-                                         side: BorderSide(color: Colors.grey, width: 2),
-                                         primary: Colors.grey.withOpacity(0.1),
-                                         onPrimary: Colors.white,
-                                         shadowColor: Colors.grey,
-                                         elevation: 20,
-                                         shape: RoundedRectangleBorder(
-                                           borderRadius: BorderRadius.all(
-                                               Radius.circular(10)),
-                                         )),
-                                   )
-                                       : Text(""),
-                               ElevatedButton.icon(
-                                 onPressed: () {
-                                   Navigator.pop(context);
-                                 },
-                                 icon: Icon(
-                                   Icons.cancel,
-                                   color: Colors.black,
-                                 ),
-                                 label: Text(
-                                   "İptal",
-                                   style: GoogleFonts.robotoMono(
-                                       color: Colors.black,
-                                       fontWeight: FontWeight.bold,
-                                       fontSize: 14),
-                                 ),
-                                 style: ElevatedButton.styleFrom(
-                                     //minimumSize: Size(150,50),
-                                     side: BorderSide(color: Colors.grey, width: 2),
-                                     fixedSize: Size(ekranGenisligi/3.2, 50),
-                                     primary: Colors.grey.withOpacity(0.1),
-                                     onPrimary: Colors.white,
-                                     shadowColor: Colors.grey,
-                                     elevation: 20,
-                                     shape: RoundedRectangleBorder(
-                                       borderRadius:
-                                       BorderRadius.all(Radius.circular(10)),
-                                     )),
-                               ),
-                               // IconButton(onPressed: (){}, icon: Icon(Icons.remove_red_eye)),
-                               ElevatedButton.icon(
-                                 onPressed: () {
-                                   setState(() {});
-                                 },
-                                 icon: Icon(Icons.remove_red_eye, color: Colors.black),
-                                 label: Text(
-                                   "Göster",
-                                   style: GoogleFonts.robotoMono(
-                                       color: Colors.black,
-                                       fontWeight: FontWeight.bold,
-                                       fontSize: 15),
-                                 ),
-                                 style: ElevatedButton.styleFrom(
-                                     side: BorderSide(color: Colors.grey, width: 2),
-                                     fixedSize: Size(ekranGenisligi/3.2, 50),
-                                     primary: Colors.grey.withOpacity(0.1),
-                                     onPrimary: Colors.white,
-                                     shadowColor: Colors.grey,
-                                     elevation: 20,
-                                     shape: RoundedRectangleBorder(
-                                       borderRadius:
-                                       BorderRadius.all(Radius.circular(10)),
-                                     )),
-                               ),
-                             ],
-                       ),
-                     ),
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(100),
+                              topRight: Radius.circular(100))),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          widget._image != null
+                              ? ElevatedButton.icon(
+                                  onPressed: () async {
+                                    testEkle(
+                                        widget.kId, body.values.toString());
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                            content: Text(
+                                      "Cevaplarınız Kaydedildi",
+                                    )));
+                                    await Future.delayed(Duration(seconds: 5));
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => MyApp()));
+                                  },
+                                  icon: Icon(
+                                    Icons.save,
+                                    color: Colors.black,
+                                  ),
+                                  label: Text(
+                                    "Onayla",
+                                    style: GoogleFonts.robotoMono(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                      fixedSize: Size(ekranGenisligi / 3.2, 50),
+                                      side: BorderSide(
+                                          color: Colors.grey, width: 2),
+                                      primary: Colors.grey.withOpacity(0.1),
+                                      onPrimary: Colors.white,
+                                      shadowColor: Colors.grey,
+                                      elevation: 20,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10)),
+                                      )),
+                                )
+                              : Text(""),
+                          Padding(padding: EdgeInsets.only(top: 10, bottom: 10), child: ElevatedButton.icon(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: Icon(
+                              Icons.cancel,
+                              color: Colors.black,
+                            ),
+                            label: Text(
+                              "İptal",
+                              style: GoogleFonts.robotoMono(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              //minimumSize: Size(150,50),
+                                side: BorderSide(color: Colors.grey, width: 2),
+                                fixedSize: Size(ekranGenisligi / 3.2, 50),
+                                primary: Colors.grey.withOpacity(0.1),
+                                onPrimary: Colors.white,
+                                shadowColor: Colors.grey,
+                                elevation: 20,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                                )),
+                          ),),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              setState(() {});
+                            },
+                            icon:
+                                Icon(Icons.remove_red_eye, color: Colors.black),
+                            label: Text(
+                              "Göster",
+                              style: GoogleFonts.robotoMono(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                                side: BorderSide(color: Colors.grey, width: 2),
+                                fixedSize: Size(ekranGenisligi / 3.2, 50),
+                                primary: Colors.grey.withOpacity(0.1),
+                                onPrimary: Colors.white,
+                                shadowColor: Colors.grey,
+                                elevation: 20,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10)),
+                                )),
+                          ),
+                        ],
+                      ),
+                    ),
                   )
                 ],
               ),

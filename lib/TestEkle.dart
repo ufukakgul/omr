@@ -137,6 +137,7 @@ class _TestEkleState extends State<TestEkle> {
                                         content: Text(
                                   "Tüm Şıkları İşaretleyin",
                                 )));
+                                print(siralanmisCevapAnahtari);
                               } else {
                                 testEkle(
                                     widget.kId, siralanmisCevapAnahtari.values.toString());
