@@ -37,8 +37,9 @@ class _TestEkleState extends State<TestEkle> {
       return cevap.body.toString();
     } else if (cevap.body.contains("false")) {
       return cevap.body.toString();
-    } else
+    } else {
       return cevap.body.toString();
+    }
   }
 
   @override

@@ -39,7 +39,7 @@ class _TestleriListeleState extends State<TestleriListele> {
     setState(() {
       if(pickedFile != null){
         _image = File(pickedFile.path);
-        Navigator.push(this.context, MaterialPageRoute(builder: (context) => UploadPic(_image)));
+        Navigator.push(this.context, MaterialPageRoute(builder: (context) => UploadPic(_image, widget.kId)));
       }else {
         print('No image selected.');
       }
@@ -51,7 +51,7 @@ class _TestleriListeleState extends State<TestleriListele> {
     setState(() {
       if(pickedFile != null){
         _image = File(pickedFile.path);
-        Navigator.push(this.context, MaterialPageRoute(builder: (context) => UploadPic(_image)));
+        Navigator.push(this.context, MaterialPageRoute(builder: (context) => UploadPic(_image, widget.kId)));
       }else {
         print('No image selected.');
       }
