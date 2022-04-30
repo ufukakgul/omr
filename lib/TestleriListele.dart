@@ -230,55 +230,79 @@ class _TestleriListeleState extends State<TestleriListele> {
                                       padding: const EdgeInsets.only(
                                           left: 8.0, top: 4),
                                       child: Text(
-                                          "Test ID: ${testListesi[i].test_id}"),
+                                          "Test ID: ${testListesi[i].test_id}", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14)),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.only(left: 8.0),
+                                      padding: const EdgeInsets.only(
+                                          left: 8.0, top: 8, bottom: 8),
                                       child: Text(
-                                          "Soru Sayısı: ${testListesi[i].cevap_anahtari.length ~/ 3}"),
+                                          "Soru Sayısı: ${testListesi[i].cevap_anahtari.length ~/ 3}", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14)),
                                     ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        IconButton(onPressed: (){}, icon: Icon(LineariconsFree.spell_check), iconSize: 30),
-                                        IconButton(onPressed: (){}, icon: Icon(Icons.camera_alt_outlined), iconSize: 30,),
-                                        IconButton(onPressed: (){}, icon: Icon(Icons.upload), iconSize: 30,),
-                                      ],
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 8.0, bottom: 4),
+                                      child: Text(testListesi[i].test_baslik, style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14)),
                                     ),
                                   ],
                                 ),
-                                PopupMenuButton(
-                                    child: Icon(Icons.more_vert),
-                                    itemBuilder: (context) => [
-                                      PopupMenuItem(
-                                          value: 1,
-                                          child: Text("Sil"))
+                                Container(
+                                  width: ekranGenisligi/2.3,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.shade50,
+                                    border: Border.all(
+                                      color: Colors.grey.shade500,
+                                      width: 2,
+                                    ),
+                                    borderRadius: BorderRadius.all(Radius.circular(50))
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      IconButton(
+                                          onPressed: () {},
+                                          icon:
+                                              Icon(LineariconsFree.spell_check),
+                                          iconSize: 30),
+                                      IconButton(
+                                        onPressed: () {},
+                                        icon: Icon(Icons.camera_alt_outlined),
+                                        iconSize: 30,
+                                      ),
+                                      IconButton(
+                                        onPressed: () {},
+                                        icon: Icon(Icons.upload),
+                                        iconSize: 30,
+                                      ),
                                     ],
-                                  onSelected: (menuItemValue) async{
-                                    if(menuItemValue == 1){
-                                      testSil(
-                                          widget.kId,
-                                          testListesi[i]
-                                              .test_id
-                                              .toString())
+                                  ),
+                                ),
+                                PopupMenuButton(
+                                  child: Icon(Icons.more_vert),
+                                  itemBuilder: (context) => [
+                                    PopupMenuItem(value: 1, child: Text("Sil"))
+                                  ],
+                                  onSelected: (menuItemValue) async {
+                                    if (menuItemValue == 1) {
+                                      testSil(widget.kId,
+                                              testListesi[i].test_id.toString())
                                           .then((value) => value
-                                          .contains("true")
-                                          ? ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                          content: Text(
-                                              "Kayıt Silindi")))
-                                          : ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                          content:
-                                          Text("Kayıt Silinemedi"))));
+                                                  .contains("true")
+                                              ? ScaffoldMessenger.of(context)
+                                                  .showSnackBar(SnackBar(
+                                                      content: Text(
+                                                          "Kayıt Silindi")))
+                                              : ScaffoldMessenger.of(context)
+                                                  .showSnackBar(SnackBar(
+                                                      content: Text(
+                                                          "Kayıt Silinemedi"))));
                                       await Future.delayed(
                                           Duration(seconds: 3));
                                       Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  TestleriListele(
-                                                      widget.kAdi,
+                                                  TestleriListele(widget.kAdi,
                                                       widget.kId)));
                                     }
                                   },

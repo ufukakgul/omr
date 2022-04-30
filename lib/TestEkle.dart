@@ -24,12 +24,14 @@ class _TestEkleState extends State<TestEkle> {
   var cevapAnahtari = <int, String>{};
   int eklenenSoruSayac = 0;
   var siralanmisCevapAnahtari;
+  var tBaslikController = TextEditingController();
 
-  Future<String> testEkle(String kullanici_id, String cevap_anahtari) async {
+  Future<String> testEkle(String kullanici_id, String cevap_anahtari, String test_baslik) async {
     var url = Uri.parse("https://ufuk.site/omr/test_islemleri/test_ekle.php");
     var veri = {
       "kullanici_id": kullanici_id,
       "cevap_anahtari": cevap_anahtari,
+      "test_baslik": test_baslik,
     };
     var cevap = await http.post(url, body: veri);
     print("Cevap: ${cevap.body}");
@@ -123,6 +125,31 @@ class _TestEkleState extends State<TestEkle> {
                         ),
                       ),
                     ),
+                  TextField(
+                    keyboardType: TextInputType.emailAddress,
+                    controller: tBaslikController,
+                    decoration: InputDecoration(
+                        hintText: "Test Başlığı",
+                        prefixIcon: Icon(
+                          Icons.my_library_books_outlined,
+                          color: Colors.grey,
+                        ),
+                        hintStyle: TextStyle(color: Colors.grey),
+                        filled: true,
+                        fillColor: Colors.white,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(20.0)),
+                          borderSide: BorderSide(
+                              color: Color(0xff736e7e), width: 2),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(15.0)),
+                          borderSide: BorderSide(
+                              color: Color(0xff736e7e), width: 2),
+                        )),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -137,10 +164,9 @@ class _TestEkleState extends State<TestEkle> {
                                         content: Text(
                                   "Tüm Şıkları İşaretleyin",
                                 )));
-                                print(siralanmisCevapAnahtari);
                               } else {
                                 testEkle(
-                                    widget.kId, siralanmisCevapAnahtari.values.toString());
+                                    widget.kId, siralanmisCevapAnahtari.values.toString(), tBaslikController.text);
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(
                                         content: Text(

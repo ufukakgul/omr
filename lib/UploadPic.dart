@@ -22,6 +22,7 @@ class UploadPic extends StatefulWidget {
 class _UploadPicState extends State<UploadPic> {
   var icerik;
   var body = <String, dynamic>{};
+  var tBaslikController = TextEditingController();
 
   Upload(File imageFile) async {
     var stream = http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
@@ -36,16 +37,23 @@ class _UploadPicState extends State<UploadPic> {
     var response = await request.send();
     print(response.statusCode);
     response.stream.transform(utf8.decoder).listen((value) {
-      body = json.decode(value);
       print(value);
+      value.contains("ERR")
+          ? body = {"1": "Hatalı Resim"}
+          : body = json.decode(value);
+      print("value");
+      print(value);
+      print("value");
     });
   }
 
-  Future<String> testEkle(String kullanici_id, String cevap_anahtari) async {
+  Future<String> testEkle(
+      String kullanici_id, String cevap_anahtari, String test_baslik) async {
     var url = Uri.parse("https://ufuk.site/omr/test_islemleri/test_ekle.php");
     var veri = {
       "kullanici_id": kullanici_id,
       "cevap_anahtari": cevap_anahtari,
+      "test_baslik": test_baslik,
     };
     var cevap = await http.post(url, body: veri);
     print("Cevap: ${cevap.body}");
@@ -99,13 +107,13 @@ class _UploadPicState extends State<UploadPic> {
                   Column(
                     children: [
                       Container(
-                        height: ekranYuksekligi/2,
+                        height: ekranYuksekligi / 2,
                         width: ekranGenisligi / 2,
                         child: widget._image != null
                             ? Image.file(
-                          widget._image!,
-                          fit: BoxFit.contain,
-                        )
+                                widget._image!,
+                                fit: BoxFit.contain,
+                              )
                             : Text("no image"),
                       ),
                       Text("\n"),
@@ -116,30 +124,40 @@ class _UploadPicState extends State<UploadPic> {
                             color: Colors.black,
                             fontWeight: FontWeight.w500),
                       ),
+                      SizedBox(
+                        width: ekranGenisligi / 1.1,
+                        child: TextField(
+                          controller: tBaslikController,
+                          decoration: InputDecoration(
+                              hintText: "Test Başlığı",
+                              prefixIcon: Icon(
+                                Icons.my_library_books_outlined,
+                                color: Colors.grey,
+                              ),
+                              hintStyle: TextStyle(color: Colors.grey),
+                              filled: true,
+                              fillColor: Colors.white,
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20.0)),
+                                borderSide: BorderSide(
+                                    color: Color(0xff736e7e), width: 2),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(15.0)),
+                                borderSide: BorderSide(
+                                    color: Color(0xff736e7e), width: 2),
+                              )),
+                        ),
+                      ),
                     ],
                   ),
                   Expanded(
                     child: Container(
                       width: ekranGenisligi,
-                      height: ekranYuksekligi/2,
+                      height: ekranYuksekligi / 2,
                       decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topRight,
-                            end: Alignment.bottomRight,
-                            stops: const [
-                              0.3,
-                              0.4,
-                              0.8,
-                              0.9,
-                            ],
-                            colors: [
-                              Color(0xff5e4d91).withOpacity(0.1),
-                              Color(0xff5e4d91).withOpacity(0.2),
-                              Color(0xff5e4d91).withOpacity(0.6),
-                              Color(0xff5e4d91).withOpacity(0.7),
-                            ],
-                          ),
-                          // color: Colors.white.withOpacity(0.4),
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(100),
                               topRight: Radius.circular(100))),
@@ -149,18 +167,29 @@ class _UploadPicState extends State<UploadPic> {
                           widget._image != null
                               ? ElevatedButton.icon(
                                   onPressed: () async {
-                                    testEkle(
-                                        widget.kId, body.values.toString());
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(
-                                            content: Text(
-                                      "Cevaplarınız Kaydedildi",
-                                    )));
-                                    await Future.delayed(Duration(seconds: 5));
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => MyApp()));
+                                    body.values.toString().contains("R")
+                                        ? ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                                content: Text(
+                                            "Resim Okunamadı",
+                                          )))
+                                        : {
+                                      testEkle(
+                                          widget.kId,
+                                          body.values.toString(),
+                                          tBaslikController.text),
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                          content: Text(
+                                            "Cevaplarınız Kaydedildi",
+                                          ))),
+                                      await Future.delayed(
+                                          Duration(seconds: 5)),
+                                      Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => MyApp())),
+                                    };
                                   },
                                   icon: Icon(
                                     Icons.save,
@@ -187,36 +216,41 @@ class _UploadPicState extends State<UploadPic> {
                                       )),
                                 )
                               : Text(""),
-                          Padding(padding: EdgeInsets.only(top: 10, bottom: 10), child: ElevatedButton.icon(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            icon: Icon(
-                              Icons.cancel,
-                              color: Colors.black,
+                          Padding(
+                            padding: EdgeInsets.only(top: 10, bottom: 10),
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              icon: Icon(
+                                Icons.cancel,
+                                color: Colors.black,
+                              ),
+                              label: Text(
+                                "İptal",
+                                style: GoogleFonts.robotoMono(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                  //minimumSize: Size(150,50),
+                                  side:
+                                      BorderSide(color: Colors.grey, width: 2),
+                                  fixedSize: Size(ekranGenisligi / 3.2, 50),
+                                  primary: Colors.grey.withOpacity(0.1),
+                                  onPrimary: Colors.white,
+                                  shadowColor: Colors.grey,
+                                  elevation: 20,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
+                                  )),
                             ),
-                            label: Text(
-                              "İptal",
-                              style: GoogleFonts.robotoMono(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              //minimumSize: Size(150,50),
-                                side: BorderSide(color: Colors.grey, width: 2),
-                                fixedSize: Size(ekranGenisligi / 3.2, 50),
-                                primary: Colors.grey.withOpacity(0.1),
-                                onPrimary: Colors.white,
-                                shadowColor: Colors.grey,
-                                elevation: 20,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                                )),
-                          ),),
+                          ),
                           ElevatedButton.icon(
                             onPressed: () {
+                              print(body);
                               setState(() {});
                             },
                             icon:
