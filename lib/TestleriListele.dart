@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:omr/Dbo/Testler.dart';
 import 'package:omr/Dbo/TestlerCevap.dart';
+import 'package:omr/TestOkuma/ManuelOkuma.dart';
 import 'package:omr/UploadPic.dart';
 import 'package:omr/KullaniciIslemleri/Login.dart';
 import 'package:omr/TestEkle.dart';
@@ -32,6 +33,7 @@ class _TestleriListeleState extends State<TestleriListele> {
   File? _image;
   final picker = ImagePicker();
   bool kontrol = true;
+  int? testId;
 
   Future fromGallery() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -260,7 +262,9 @@ class _TestleriListeleState extends State<TestleriListele> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       IconButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            Navigator.push(context, MaterialPageRoute(builder: (context) => ManeulOkuma(testListesi[i].test_id, testListesi[i].cevap_anahtari.length ~/ 3, widget.kAdi, widget.kId)));
+                                          },
                                           icon:
                                               Icon(LineariconsFree.spell_check),
                                           iconSize: 30),

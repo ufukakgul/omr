@@ -27,7 +27,7 @@ class _UploadPicState extends State<UploadPic> {
   Upload(File imageFile) async {
     var stream = http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
     var length = await imageFile.length();
-    var uri = Uri.parse("http://192.168.1.103:5000/getAnswers");
+    var uri = Uri.parse("http://185.106.208.106:5000/getAnswers");
     var request = new http.MultipartRequest("POST", uri);
     var multipartFile = new http.MultipartFile('file', stream, length,
         filename: basename(imageFile.path));
