@@ -39,6 +39,7 @@ dependencies:
   shared_preferences:
   circular_menu: ^1.2.3
   image_picker: ^0.8.5
+  provider: ^6.0.2
 
 dev_dependencies:
   flutter_test:
