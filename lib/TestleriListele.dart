@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:omr/Dbo/Testler.dart';
 import 'package:omr/Dbo/TestlerCevap.dart';
+import 'package:omr/SonuclarListesi.dart';
 import 'package:omr/TestOkuma/ManuelOkuma.dart';
 import 'package:omr/UploadPic.dart';
 import 'package:omr/KullaniciIslemleri/Login.dart';
@@ -284,7 +285,8 @@ class _TestleriListeleState extends State<TestleriListele> {
                                 PopupMenuButton(
                                   child: Icon(Icons.more_vert),
                                   itemBuilder: (context) => [
-                                    PopupMenuItem(value: 1, child: Text("Sil"))
+                                    PopupMenuItem(value: 2, child: Text("Sonuçları Gör")),
+                                    PopupMenuItem(value: 1, child: Text("Sil")),
                                   ],
                                   onSelected: (menuItemValue) async {
                                     if (menuItemValue == 1) {
@@ -308,6 +310,9 @@ class _TestleriListeleState extends State<TestleriListele> {
                                               builder: (context) =>
                                                   TestleriListele(widget.kAdi,
                                                       widget.kId)));
+                                    }else if(menuItemValue == 2){
+                                      testId = int.parse(testListesi[i].test_id);
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => SonuclarListesi(testId!)));
                                     }
                                   },
                                 )

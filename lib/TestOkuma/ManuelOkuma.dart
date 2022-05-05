@@ -33,6 +33,9 @@ class _ManeulOkumaState extends State<ManeulOkuma> {
   int yanlis = 0;
   int bos = 0;
   bool tamamla = false;
+  var alinanPuan;
+  var ogrenci_ismi = TextEditingController();
+  var ogrenci_numarasi = TextEditingController();
 
   List<Testler> parseTestlerCevap(String cevap) {
     var jsonVeri = json.decode(cevap);
@@ -53,6 +56,26 @@ class _ManeulOkumaState extends State<ManeulOkuma> {
     return parseTestlerCevap(cevap.body);
   }
 
+  Future<String> testEkle(String test_id, String ogrenci_adi, String ogrenci_numarasi, String alinan_puan, String ogrenci_cevaplar) async {
+    var url = Uri.parse("https://ufuk.site/omr/test_islemleri/test_sonuc_ekle.php");
+    var veri = {
+      "test_id": test_id,
+      "ogrenci_adi": ogrenci_adi,
+      "ogrenci_numarasi": ogrenci_numarasi,
+      "alinan_puan": alinan_puan,
+      "ogrenci_cevaplar": ogrenci_cevaplar,
+    };
+    var cevap = await http.post(url, body: veri);
+    print("Cevap: ${cevap.body}");
+    if (cevap.body.contains("true")) {
+      return cevap.body.toString();
+    } else if (cevap.body.contains("false")) {
+      return cevap.body.toString();
+    } else {
+      return cevap.body.toString();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var ekranBilgisi = MediaQuery.of(context);
@@ -70,8 +93,14 @@ class _ManeulOkumaState extends State<ManeulOkuma> {
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
               IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.add),
+                onPressed: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => TestleriListele(
+                              widget.kAdi, widget.kId)));
+                },
+                icon: Icon(Icons.arrow_back_ios_rounded,),
                 hoverColor: Colors.white,
               )
             ],
@@ -123,7 +152,8 @@ class _ManeulOkumaState extends State<ManeulOkuma> {
                           ),
                           Spacer(),
                           Text(
-                            "${(100 / widget.soruSayisi * dogru).toStringAsFixed(2)}",
+                            "${alinanPuan}",
+                            // "${(100 / widget.soruSayisi * dogru).toStringAsFixed(2)}",
                             style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold),
@@ -170,6 +200,10 @@ class _ManeulOkumaState extends State<ManeulOkuma> {
                                           SplayTreeMap<int, String>.from(
                                               cevapAnahtari);
                                       eklenenSoruSayac++;
+                                      dogru=0;
+                                      yanlis =0 ;
+                                      bos =0;
+                                      alinanPuan = 0;
                                     });
                                   },
                                   style: TextButton.styleFrom(
@@ -197,6 +231,7 @@ class _ManeulOkumaState extends State<ManeulOkuma> {
                         child: ElevatedButton.icon(
                             onPressed: () async {
                               tamamla = true;
+                              alinanPuan = (100 / widget.soruSayisi * dogru).toStringAsFixed(2);
                               setState(() {});
                             },
                             icon: Icon(
@@ -228,14 +263,146 @@ class _ManeulOkumaState extends State<ManeulOkuma> {
                         padding: const EdgeInsets.only(right: 8.0),
                         child: ElevatedButton.icon(
                             onPressed: () {
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => TestleriListele(
-                                          widget.kAdi, widget.kId)));
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                                      ),
+                                      contentPadding: EdgeInsets.only(top: 0.0),
+                                      content: (Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Container(
+                                            padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
+                                            decoration: BoxDecoration(
+                                              color: Color(0xff5e4d91),
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(32.0),
+                                                  topRight: Radius.circular(32.0)),
+                                            ),
+                                            child: Text(
+                                              "Öğrenci Bilgileri",
+                                              style: TextStyle(color: Colors.white),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 5.0,
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 12.0, left: 12, right: 12),
+                                            child: Column(
+                                              children: [
+                                                Padding(padding: EdgeInsets.only(bottom: 8), child: TextField(
+                                                  controller: ogrenci_ismi,
+                                                  keyboardType: TextInputType.number,
+                                                  textInputAction: TextInputAction.done,
+                                                  //autofocus: true,
+                                                  enabled: true,
+                                                  showCursor: false,
+                                                  maxLines: 1,
+                                                  decoration: InputDecoration(
+                                                    hintText: "Öğrenci İsmi",
+                                                    hintStyle: TextStyle(
+                                                        color: Colors.black, fontSize: 16),
+                                                    enabledBorder: OutlineInputBorder(
+                                                      borderRadius:
+                                                      BorderRadius.all(Radius.circular(10)),
+                                                      borderSide: BorderSide(
+                                                          color: Colors.grey, width: 2),
+                                                    ),
+                                                    focusedBorder: OutlineInputBorder(
+                                                      borderRadius:
+                                                      BorderRadius.all(Radius.circular(10)),
+                                                      borderSide: BorderSide(
+                                                          color: Colors.grey, width: 2),
+                                                    ),
+                                                  ),
+                                                ),),
+                                                TextField(
+                                                  controller: ogrenci_numarasi,
+                                                  keyboardType: TextInputType.number,
+                                                  textInputAction: TextInputAction.done,
+                                                  //autofocus: true,
+                                                  enabled: true,
+                                                  showCursor: false,
+                                                  maxLines: 1,
+                                                  decoration: InputDecoration(
+                                                    hintText: "Öğrenci Numarası",
+                                                    hintStyle: TextStyle(
+                                                        color: Colors.black, fontSize: 16),
+                                                    enabledBorder: OutlineInputBorder(
+                                                      borderRadius:
+                                                      BorderRadius.all(Radius.circular(10)),
+                                                      borderSide: BorderSide(
+                                                          color: Colors.grey, width: 2),
+                                                    ),
+                                                    focusedBorder: OutlineInputBorder(
+                                                      borderRadius:
+                                                      BorderRadius.all(Radius.circular(10)),
+                                                      borderSide: BorderSide(
+                                                          color: Colors.grey, width: 2),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                          ),
+                                        ],
+                                      )),
+                                      actions: [
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: ElevatedButton(
+                                                onPressed: () {
+                                                  testEkle(widget.testId, ogrenci_ismi.text,
+                                                      ogrenci_numarasi.text, alinanPuan,
+                                                      siralanmisCevapAnahtari.values.toString());
+                                                },
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: Text("Gönder",
+                                                      style: TextStyle(fontSize: 16)),
+                                                ),
+                                                style: ElevatedButton.styleFrom(
+                                                    primary: Color(0xff5e4d91),
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.all(
+                                                          Radius.circular(20)),
+                                                    )),
+                                              ),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () {
+                                              },
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: Text("İptal",
+                                                    style: TextStyle(fontSize: 16)),
+                                              ),
+                                              style: ElevatedButton.styleFrom(
+                                                  primary: Color(0xff5e4d91),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                    BorderRadius.all(Radius.circular(20)),
+                                                  )),
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    );
+                                  });
                             },
                             icon: Icon(
-                              Icons.arrow_back_ios_rounded,
+                              Icons.keyboard_double_arrow_up_sharp,
                               color: Colors.black,
                             ),
                             label: SizedBox(
@@ -243,7 +410,7 @@ class _ManeulOkumaState extends State<ManeulOkuma> {
                               width: 80,
                               child: Center(
                                 child: Text(
-                                  "Geri Dön",
+                                  "Gönder",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold,
