@@ -35,6 +35,7 @@ class _TestleriListeleState extends State<TestleriListele> {
   final picker = ImagePicker();
   bool kontrol = true;
   int? testId;
+  String testBaslik ="";
 
   Future fromGallery() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -264,7 +265,7 @@ class _TestleriListeleState extends State<TestleriListele> {
                                     children: [
                                       IconButton(
                                           onPressed: () {
-                                            Navigator.push(context, MaterialPageRoute(builder: (context) => ManeulOkuma(testListesi[i].test_id, testListesi[i].cevap_anahtari.length ~/ 3, widget.kAdi, widget.kId)));
+                                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ManeulOkuma(testListesi[i].test_id, testListesi[i].cevap_anahtari.length ~/ 3, widget.kAdi, widget.kId)));
                                           },
                                           icon:
                                               Icon(LineariconsFree.spell_check),
@@ -312,7 +313,8 @@ class _TestleriListeleState extends State<TestleriListele> {
                                                       widget.kId)));
                                     }else if(menuItemValue == 2){
                                       testId = int.parse(testListesi[i].test_id);
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => SonuclarListesi(testId!)));
+                                      testBaslik = testListesi[i].test_baslik;
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => SonuclarListesi(testId!, testBaslik)));
                                     }
                                   },
                                 )
