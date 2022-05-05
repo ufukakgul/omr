@@ -1,11 +1,9 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_string_interpolations
 import 'dart:collection';
 import 'package:flutter/material.dart';
-import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:http/http.dart' as http;
 import 'package:omr/Dbo/Testler.dart';
 import 'package:omr/Dbo/TestlerCevap.dart';
-import 'package:omr/main.dart';
 import 'package:omr/TestleriListele.dart';
 import 'dart:convert';
 
@@ -26,12 +24,15 @@ class _ManeulOkumaState extends State<ManeulOkuma> {
   var secilen = <int, int>{};
   var cevapAnahtari = <int, String>{};
   int eklenenSoruSayac = 0;
-  var siralanmisCevapAnahtari= <int, String>{};
+  var siralanmisCevapAnahtari = <int, String>{};
   int testSayisi = 1;
   bool durum = false;
+  String finalStr = "";
+  String finalStr2 = "";
   int dogru = 0;
   int yanlis = 0;
   int bos = 0;
+  bool tamamla = false;
 
   List<Testler> parseTestlerCevap(String cevap) {
     var jsonVeri = json.decode(cevap);
@@ -54,10 +55,10 @@ class _ManeulOkumaState extends State<ManeulOkuma> {
 
   @override
   Widget build(BuildContext context) {
+    var ekranBilgisi = MediaQuery.of(context);
+    final double ekranYuksekligi = ekranBilgisi.size.height;
+    final double ekranGenisligi = ekranBilgisi.size.width;
     List cevapAnahtariListe = [];
-    int dogruSayisi=0;
-    int yanlisSayisi = 0;
-    int bosSayisi = 0;
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Color(0xff5e4d91).withOpacity(0.8),
@@ -93,6 +94,58 @@ class _ManeulOkumaState extends State<ManeulOkuma> {
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
+                  Padding(
+                    padding: EdgeInsets.all(8),
+                    child: Container(
+                      height: 70,
+                      width: ekranGenisligi,
+                      child: tamamla
+                          ? Padding(padding: EdgeInsets.all(5), child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Doğru: "),
+                              Text("Yanlış: "),
+                              Text("Boş: "),
+                            ],
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("$dogru"),
+                              Text("$yanlis"),
+                              Text("$bos"),
+                            ],
+                          ),
+                          Spacer(),
+                          Text(
+                            "${(100 / widget.soruSayisi * dogru).toStringAsFixed(2)}",
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      )
+                    ): Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("Sonuçlar",
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold)),
+                            Text("(Sonuçları Görmek İçin Lütfen Tamamla Butonuna Basın)", style:
+                            TextStyle(color: Colors.transparent.withOpacity(0.5), fontSize: 12),)
+                          ],
+                        )
+                      ),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black)),),
+                  ),
                   for (int i = 0; i < widget.soruSayisi; i++)
                     Card(
                       shape: RoundedRectangleBorder(
@@ -117,7 +170,6 @@ class _ManeulOkumaState extends State<ManeulOkuma> {
                                           SplayTreeMap<int, String>.from(
                                               cevapAnahtari);
                                       eklenenSoruSayac++;
-
                                     });
                                   },
                                   style: TextButton.styleFrom(
@@ -144,7 +196,8 @@ class _ManeulOkumaState extends State<ManeulOkuma> {
                         padding: const EdgeInsets.only(left: 8.0),
                         child: ElevatedButton.icon(
                             onPressed: () async {
-                              print(cevapAnahtari.values.toString());
+                              tamamla = true;
+                              setState(() {});
                             },
                             icon: Icon(
                               Icons.add,
@@ -208,8 +261,8 @@ class _ManeulOkumaState extends State<ManeulOkuma> {
                       )
                     ],
                   ),
-                 SizedBox(
-                    height: 100,
+                  SizedBox(
+                    height: widget.soruSayisi*20,
                     child: FutureBuilder<List<Testler>>(
                         future: testOku(widget.testId),
                         builder: (context, snapshot) {
@@ -219,52 +272,75 @@ class _ManeulOkumaState extends State<ManeulOkuma> {
                             List<Testler> testListesi = snapshot.data!;
                             cevapAnahtariListe.clear();
                             for (int i = 1;
-                            i <= testListesi[0].cevap_anahtari.length;
-                            i += 3) {
-                              cevapAnahtariListe.add(testListesi[0].cevap_anahtari[i]);
+                                i <= testListesi[0].cevap_anahtari.length;
+                                i += 3) {
+                              cevapAnahtariListe
+                                  .add(testListesi[0].cevap_anahtari[i]);
                             }
+                            bos = 0;
+                            dogru = 0;
+                            yanlis = 0;
+                            for (int i = 1; i < widget.soruSayisi + 1; i++) {
+                              if (siralanmisCevapAnahtari[i] == null) {
+                                bos++;
+                              } else if (siralanmisCevapAnahtari[i] ==
+                                  cevapAnahtariListe[i - 1]) {
+                                dogru++;
+                              } else if (siralanmisCevapAnahtari[i] !=
+                                  cevapAnahtariListe[i - 1]) {
+                                yanlis++;
+                              }
+                            }
+                            print(siralanmisCevapAnahtari[1]);
+                            print(cevapAnahtariListe[0]);
                             return GridView.builder(
                                 gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 5,
-                                    childAspectRatio: 5/4
-                                ),
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 5,
+                                        childAspectRatio: 5 / 4),
                                 itemCount: widget.soruSayisi,
                                 itemBuilder: (context, indeks) {
                                   return Card(
-                                      color: cevapAnahtariListe[indeks] == siralanmisCevapAnahtari[indeks+1] ? (Colors.green)
-                                          : siralanmisCevapAnahtari[indeks+1]==null ? Colors.white : Colors.red,
+                                      color: cevapAnahtariListe[indeks] ==
+                                              siralanmisCevapAnahtari[
+                                                  indeks + 1]
+                                          ? (Colors.green)
+                                          : siralanmisCevapAnahtari[
+                                                      indeks + 1] ==
+                                                  null
+                                              ? Colors.white
+                                              : Colors.red,
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
-                                          Text("${indeks+1}"),
+                                          Text("${indeks + 1}"),
                                           Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
                                             children: [
-                                              Text("${cevapAnahtariListe[indeks]}"),
-                                              siralanmisCevapAnahtari[indeks+1] == null
+                                              Text(
+                                                  "${cevapAnahtariListe[indeks]}"),
+                                              siralanmisCevapAnahtari[
+                                                          indeks + 1] ==
+                                                      null
                                                   ? Text(" ")
-                                                  : Text(" - ${siralanmisCevapAnahtari[indeks+1]}"),
+                                                  : Text(
+                                                      " - ${siralanmisCevapAnahtari[indeks + 1]}"),
                                             ],
                                           ),
                                         ],
-                                      )
-                                  );
+                                      ));
                                 });
                           } else {
                             return Center(child: CircularProgressIndicator());
                           }
                         }),
                   ),
-                  Text("${siralanmisCevapAnahtari.values.toList()}"),
-                  Text("$dogruSayisi"),
-                  Text("$yanlisSayisi"),
-                  Text("$yanlis")
                 ],
               ),
             ),
           ),
-        )
-        );
+        ));
   }
 }
