@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:omr/Dbo/Testler.dart';
 import 'package:omr/Dbo/TestlerCevap.dart';
 import 'package:omr/SonuclarListesi.dart';
+import 'package:omr/TestOkuma/GoruntudenOkuma.dart';
 import 'package:omr/TestOkuma/ManuelOkuma.dart';
 import 'package:omr/UploadPic.dart';
 import 'package:omr/KullaniciIslemleri/Login.dart';
@@ -37,13 +38,14 @@ class _TestleriListeleState extends State<TestleriListele> {
   int? testId;
   String testBaslik ="";
 
+
   Future fromGallery() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
         Navigator.push(
-            this.context,
+            context,
             MaterialPageRoute(
                 builder: (context) => UploadPic(_image, widget.kId)));
       } else {
@@ -58,9 +60,39 @@ class _TestleriListeleState extends State<TestleriListele> {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
         Navigator.push(
-            this.context,
+            context,
             MaterialPageRoute(
                 builder: (context) => UploadPic(_image, widget.kId)));
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+  Future testOkuFromCamera(String testId, int soruSayisi) async {
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => GoruntudenOkuma(_image, widget.kId, widget.kAdi, testId, soruSayisi)));
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+  Future testOkuFromGallery(String testId, int soruSayisi) async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => GoruntudenOkuma(_image, widget.kId, widget.kAdi, testId, soruSayisi)));
+        // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ManeulOkuma(testListesi[i].test_id, testListesi[i].cevap_anahtari.length ~/ 3, widget.kAdi, widget.kId)));
+
       } else {
         print('No image selected.');
       }
@@ -271,12 +303,16 @@ class _TestleriListeleState extends State<TestleriListele> {
                                               Icon(LineariconsFree.spell_check),
                                           iconSize: 30),
                                       IconButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          testOkuFromCamera(testListesi[i].test_id, testListesi[i].cevap_anahtari.length ~/ 3);
+                                        },
                                         icon: Icon(Icons.camera_alt_outlined),
                                         iconSize: 30,
                                       ),
                                       IconButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          testOkuFromGallery(testListesi[i].test_id, testListesi[i].cevap_anahtari.length ~/ 3);
+                                        },
                                         icon: Icon(Icons.upload),
                                         iconSize: 30,
                                       ),
