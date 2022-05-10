@@ -408,15 +408,14 @@ class _TestleriListeleState extends State<TestleriListele> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    eklenenSoruSayisi.text != ""
-                                        ? Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) => TestEkle(
-                                                    eklenenSoruSayisi.text,
-                                                    widget.kAdi,
-                                                    widget.kId)))
-                                        : Text("Hata");
+                                    eklenenSoruSayisi.text == "" || eklenenSoruSayisi.text.contains(RegExp(r'[A-Z]'))
+                                        || eklenenSoruSayisi.text.contains(RegExp(r'[a-z]')) ?
+                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Lütfen geçerli bir değer giriniz."))) :
+                                    int.parse(eklenenSoruSayisi.text) > 50 || int.parse(eklenenSoruSayisi.text) <1 ?
+                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("1 ile 50 arası soru eklenebilir."))) :
+                                    int.parse(eklenenSoruSayisi.text) >= 1 || int.parse(eklenenSoruSayisi.text) <=50 ?
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                                        TestEkle(eklenenSoruSayisi.text, widget.kAdi, widget.kId))): Text("Hata");
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
