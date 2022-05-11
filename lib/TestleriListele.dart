@@ -91,7 +91,6 @@ class _TestleriListeleState extends State<TestleriListele> {
             context,
             MaterialPageRoute(
                 builder: (context) => GoruntudenOkuma(_image, widget.kId, widget.kAdi, testId, soruSayisi)));
-        // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ManeulOkuma(testListesi[i].test_id, testListesi[i].cevap_anahtari.length ~/ 3, widget.kAdi, widget.kId)));
 
       } else {
         print('No image selected.');
