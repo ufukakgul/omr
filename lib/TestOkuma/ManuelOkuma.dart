@@ -251,8 +251,22 @@ class _ManeulOkumaState extends State<ManeulOkuma> {
                         child: ElevatedButton.icon(
                             onPressed: () async {
                               tamamla = true;
-                              alinanPuan = (100 / widget.soruSayisi * dogru)
-                                  .toStringAsFixed(2);
+                              print(siralanmisCevapAnahtari);
+                              bos = 0;
+                              dogru = 0;
+                              yanlis = 0;
+                              for (int i = 1; i < widget.soruSayisi + 1; i++) {
+                                if (siralanmisCevapAnahtari[i] == null || siralanmisCevapAnahtari[i] == "#") {
+                                  siralanmisCevapAnahtari[i] = "#";
+                                  bos++;
+                                } else if (siralanmisCevapAnahtari[i] ==
+                                    cevapAnahtariListe[i - 1]) {
+                                  dogru++;
+                                } else if (siralanmisCevapAnahtari[i] != cevapAnahtariListe[i - 1] && siralanmisCevapAnahtari[i] != "#") {
+                                  yanlis++;
+                                }
+                              }
+                              alinanPuan = (100 / widget.soruSayisi * dogru).toStringAsFixed(2);
                               setState(() {});
                             },
                             icon: Icon(
@@ -543,20 +557,21 @@ class _ManeulOkumaState extends State<ManeulOkuma> {
                               cevapAnahtariListe
                                   .add(testListesi[0].cevap_anahtari[i]);
                             }
-                            bos = 0;
-                            dogru = 0;
-                            yanlis = 0;
-                            for (int i = 1; i < widget.soruSayisi + 1; i++) {
-                              if (siralanmisCevapAnahtari[i] == null) {
-                                bos++;
-                              } else if (siralanmisCevapAnahtari[i] ==
-                                  cevapAnahtariListe[i - 1]) {
-                                dogru++;
-                              } else if (siralanmisCevapAnahtari[i] !=
-                                  cevapAnahtariListe[i - 1]) {
-                                yanlis++;
-                              }
-                            }
+                            // bos = 0;
+                            // dogru = 0;
+                            // yanlis = 0;
+                            // for (int i = 1; i < widget.soruSayisi + 1; i++) {
+                            //   if (siralanmisCevapAnahtari[i] == null) {
+                            //     siralanmisCevapAnahtari[i] = "#";
+                            //     bos++;
+                            //   } else if (siralanmisCevapAnahtari[i] ==
+                            //       cevapAnahtariListe[i - 1]) {
+                            //     dogru++;
+                            //   } else if (siralanmisCevapAnahtari[i] !=
+                            //       cevapAnahtariListe[i - 1]) {
+                            //     yanlis++;
+                            //   }
+                            // }
                             return GridView.builder(
                                 gridDelegate:
                                     SliverGridDelegateWithFixedCrossAxisCount(
@@ -566,7 +581,8 @@ class _ManeulOkumaState extends State<ManeulOkuma> {
                                 itemBuilder: (context, indeks) {
                                   return Card(
                                       color: cevapAnahtariListe[indeks] == siralanmisCevapAnahtari[indeks + 1]
-                                          ? (Colors.green) : siralanmisCevapAnahtari[indeks + 1] == null ? Colors.white : Colors.red,
+                                          ? (Colors.green) : siralanmisCevapAnahtari[indeks + 1] == null
+                                          ? Colors.white : siralanmisCevapAnahtari[indeks + 1] == "#" ? Colors.blue : Colors.red,
                                       child: Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,

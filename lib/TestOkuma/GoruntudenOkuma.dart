@@ -292,11 +292,8 @@ class _GoruntudenOkumaState extends State<GoruntudenOkuma> {
                                     itemCount: widget.soruSayisi,
                                     itemBuilder: (context, indeks) {
                                       return Card(
-                                          color: cevapAnahtariListe[indeks] ==
-                                                  body.values.toList()[indeks]
-                                              ? (Colors.green)
-                                              : body.values.toList()[indeks] ==
-                                                      null
+                                          color: cevapAnahtariListe[indeks] == body.values.toList()[indeks]
+                                              ? (Colors.green) : body.values.toList()[indeks] == null
                                                   ? Colors.white : body.values.toList()[indeks] == "#" || body.values.toList()[indeks] == "*" ? Colors.blue
                                                   : Colors.red,
                                           child: Column(

@@ -94,10 +94,12 @@ class _SonuclarListesiState extends State<SonuclarListesi> {
                           shape: RoundedRectangleBorder(
                               borderRadius:
                               BorderRadius.all(Radius.circular(30))),
-                          color: Color(0xff5e4d91).withOpacity(0.4),
+                          // color: Color(0xff5e4d91).withOpacity(0.6),
+                          color: Colors.indigoAccent.shade100.withOpacity(0.5),
+                          //elevation: 10,
                           child: Padding(padding: EdgeInsets.only(left: 16, right: 24),
                           child: SizedBox(
-                            height: 50,
+                            height: 60,
                             child: Padding(
                               padding: EdgeInsets.all(6),
                               child: Row(
@@ -115,18 +117,56 @@ class _SonuclarListesiState extends State<SonuclarListesi> {
                                       child: Text("${indeks+1}", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
                                     ),
                                   ),),
-                                  Container(
-                                    width: ekranGenisligi/3.5,
-                                    child: Text("${sonuc.ogrenci_numarasi}", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text("${sonuc.ogrenci_numarasi}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),),
+                                      Text("${sonuc.ogrenci_adi}", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+                                    ],
                                   ),
-                                  Container(
-                                    width: ekranGenisligi/3.5,
-                                    child: Text("${sonuc.ogrenci_adi}", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
+                                  SizedBox(
+                                    width: ekranGenisligi/7,
                                   ),
-                                  Container(
-                                    width: ekranGenisligi/6,
+                                  Spacer(),
+                                  SizedBox(
+                                    width: ekranGenisligi/5,
                                     child: Text("${sonuc.alinan_puan}", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
                                   ),
+                                  PopupMenuButton(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(8.0),
+                                        bottomRight: Radius.circular(8.0),
+                                        topLeft: Radius.circular(8.0),
+                                        topRight: Radius.circular(8.0),
+                                      ),
+                                    ),
+                                    child: Icon(Icons.more_vert),
+                                    itemBuilder: (context) => [
+                                      PopupMenuItem(value: 2, child: Row(
+                                        children: [
+                                          Icon(Icons.person_search_outlined),
+                                          SizedBox(width: 5,),
+                                          Text("İncele")
+                                        ],
+                                      )),
+                                      PopupMenuItem(value: 1, child: Row(
+                                        children: [
+                                          Icon(Icons.delete),
+                                          SizedBox(width: 5,),
+                                          Text("Sil")
+                                        ],
+                                      )),
+                                    ],
+                                    onSelected: (menuItemValue) async {
+                                      if (menuItemValue == 1) {
+
+                                      }else if(menuItemValue == 2){
+
+                                      }
+                                    },
+                                  )
                                 ],
                               ),
                             ),

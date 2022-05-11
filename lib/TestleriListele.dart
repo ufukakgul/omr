@@ -250,11 +250,11 @@ class _TestleriListeleState extends State<TestleriListele> {
                       children: [
                         for (int i = 0; i < testSayisi; i++)
                           Card(
+                            color: Colors.indigoAccent.shade100.withOpacity(0.5),
                             shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5))),
-                            shadowColor: Colors.black,
-                            elevation: 5,
+                                borderRadius: BorderRadius.all(Radius.circular(5))),
+                            // shadowColor: Colors.black,
+                            //elevation: 25,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -283,10 +283,11 @@ class _TestleriListeleState extends State<TestleriListele> {
                                 Container(
                                   width: ekranGenisligi/2.3,
                                   decoration: BoxDecoration(
-                                    color: Colors.grey.shade50,
+                                    color: Colors.indigoAccent.shade100.withOpacity(0.1),
+                                    // color: Colors.grey.shade50,
                                     border: Border.all(
-                                      color: Colors.grey.shade500,
-                                      width: 2,
+                                      color: Colors.indigoAccent.shade200.withOpacity(0.9),
+                                      width: 1,
                                     ),
                                     borderRadius: BorderRadius.all(Radius.circular(50))
                                   ),
@@ -320,9 +321,30 @@ class _TestleriListeleState extends State<TestleriListele> {
                                 ),
                                 PopupMenuButton(
                                   child: Icon(Icons.more_vert),
+                                  //color: Color(0xffbcb8ce),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                      bottomLeft: Radius.circular(16.0),
+                                      bottomRight: Radius.circular(16.0),
+                                      topLeft: Radius.circular(16.0),
+                                      topRight: Radius.circular(16.0),
+                                    ),
+                                  ),
                                   itemBuilder: (context) => [
-                                    PopupMenuItem(value: 2, child: Text("Sonuçları Gör")),
-                                    PopupMenuItem(value: 1, child: Text("Sil")),
+                                    PopupMenuItem(value: 2, child: Row(
+                                      children: [
+                                        Icon(Icons.list_outlined),
+                                        SizedBox(width: 5,),
+                                        Text("Sonuçları Gör")
+                                      ],
+                                    )),
+                                    PopupMenuItem(value: 1, child: Row(
+                                      children: [
+                                        Icon(Icons.delete),
+                                        SizedBox(width: 5,),
+                                        Text("Sil")
+                                      ],
+                                    )),
                                   ],
                                   onSelected: (menuItemValue) async {
                                     if (menuItemValue == 1) {
