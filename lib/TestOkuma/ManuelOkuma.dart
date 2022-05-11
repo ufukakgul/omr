@@ -557,8 +557,6 @@ class _ManeulOkumaState extends State<ManeulOkuma> {
                                 yanlis++;
                               }
                             }
-                            print(siralanmisCevapAnahtari[1]);
-                            print(cevapAnahtariListe[0]);
                             return GridView.builder(
                                 gridDelegate:
                                     SliverGridDelegateWithFixedCrossAxisCount(
@@ -567,15 +565,8 @@ class _ManeulOkumaState extends State<ManeulOkuma> {
                                 itemCount: widget.soruSayisi,
                                 itemBuilder: (context, indeks) {
                                   return Card(
-                                      color: cevapAnahtariListe[indeks] ==
-                                              siralanmisCevapAnahtari[
-                                                  indeks + 1]
-                                          ? (Colors.green)
-                                          : siralanmisCevapAnahtari[
-                                                      indeks + 1] ==
-                                                  null
-                                              ? Colors.white
-                                              : Colors.red,
+                                      color: cevapAnahtariListe[indeks] == siralanmisCevapAnahtari[indeks + 1]
+                                          ? (Colors.green) : siralanmisCevapAnahtari[indeks + 1] == null ? Colors.white : Colors.red,
                                       child: Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,

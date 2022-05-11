@@ -274,7 +274,7 @@ class _GoruntudenOkumaState extends State<GoruntudenOkuma> {
                                 dogru = 0;
                                 yanlis = 0;
                                 for (int i = 0; i < widget.soruSayisi; i++) {
-                                  if (body.values.toList()[i] == null) {
+                                  if (body.values.toList()[i] == "#") {
                                     bos++;
                                   } else if (body.values.toList()[i] ==
                                       cevapAnahtariListe[i]) {
@@ -297,7 +297,7 @@ class _GoruntudenOkumaState extends State<GoruntudenOkuma> {
                                               ? (Colors.green)
                                               : body.values.toList()[indeks] ==
                                                       null
-                                                  ? Colors.white
+                                                  ? Colors.white : body.values.toList()[indeks] == "#" || body.values.toList()[indeks] == "*" ? Colors.blue
                                                   : Colors.red,
                                           child: Column(
                                             mainAxisAlignment:
