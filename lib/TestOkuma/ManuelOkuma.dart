@@ -93,7 +93,7 @@ class _ManeulOkumaState extends State<ManeulOkuma> {
     List cevapAnahtariListe = [];
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Color(0xff5e4d91).withOpacity(0.8),
+          backgroundColor: Colors.indigoAccent.shade700.withOpacity(0.5),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

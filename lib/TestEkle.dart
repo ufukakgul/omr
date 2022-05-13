@@ -51,7 +51,7 @@ class _TestEkleState extends State<TestEkle> {
     final double ekranGenisligi = ekranBilgisi.size.width;
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Color(0xff5e4d91).withOpacity(0.8),
+          backgroundColor: Colors.indigoAccent.shade700.withOpacity(0.5),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

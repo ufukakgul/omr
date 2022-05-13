@@ -51,7 +51,7 @@ class _SonuclarListesiState extends State<SonuclarListesi> {
           iconTheme: IconThemeData(
             color: Colors.black, //change your color here
           ),
-          backgroundColor: Color(0xff5e4d91).withOpacity(0.8),
+          backgroundColor: Colors.indigoAccent.shade700.withOpacity(0.5),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
