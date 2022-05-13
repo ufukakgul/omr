@@ -162,7 +162,7 @@ class _TestleriListeleState extends State<TestleriListele> {
     var eklenenSoruSayisi = TextEditingController();
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xff5e4d91).withOpacity(0.8),
+        backgroundColor: Colors.indigoAccent.shade700.withOpacity(0.5),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -252,39 +252,43 @@ class _TestleriListeleState extends State<TestleriListele> {
                           Card(
                             color: Colors.indigoAccent.shade100.withOpacity(0.5),
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(5))),
-                            // shadowColor: Colors.black,
-                            //elevation: 25,
+                                borderRadius: BorderRadius.all(Radius.circular(16))),
+                            shadowColor: Colors.black,
+                            elevation: 5,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 8.0, top: 4),
-                                      child: Text(
-                                          "Test ID: ${testListesi[i].test_id}", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14)),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 8.0, top: 8, bottom: 8),
-                                      child: Text(
-                                          "Soru Sayısı: ${testListesi[i].cevap_anahtari.length ~/ 3}", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14)),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 8.0, bottom: 4),
-                                      child: Text(testListesi[i].test_baslik, style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14)),
-                                    ),
-                                  ],
+                                SizedBox(
+                                  height : ekranYuksekligi/11.6,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 8.0, top: 4),
+                                        child: Text(
+                                            "Test ID: ${testListesi[i].test_id}", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14)),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 8.0),
+                                        child: Text(
+                                            "Soru Sayısı: ${testListesi[i].cevap_anahtari.length ~/ 3}", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14)),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 8.0, bottom: 4),
+                                        child: Text(testListesi[i].test_baslik, style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14)),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                                 Container(
                                   width: ekranGenisligi/2.3,
                                   decoration: BoxDecoration(
-                                    color: Colors.indigoAccent.shade100.withOpacity(0.1),
-                                    // color: Colors.grey.shade50,
+                                    // color: Colors.indigoAccent.shade100.withOpacity(0.1),
+                                    color: Colors.grey.shade50,
                                     border: Border.all(
                                       color: Colors.indigoAccent.shade200.withOpacity(0.9),
                                       width: 1,
