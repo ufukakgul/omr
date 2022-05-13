@@ -557,21 +557,6 @@ class _ManeulOkumaState extends State<ManeulOkuma> {
                               cevapAnahtariListe
                                   .add(testListesi[0].cevap_anahtari[i]);
                             }
-                            // bos = 0;
-                            // dogru = 0;
-                            // yanlis = 0;
-                            // for (int i = 1; i < widget.soruSayisi + 1; i++) {
-                            //   if (siralanmisCevapAnahtari[i] == null) {
-                            //     siralanmisCevapAnahtari[i] = "#";
-                            //     bos++;
-                            //   } else if (siralanmisCevapAnahtari[i] ==
-                            //       cevapAnahtariListe[i - 1]) {
-                            //     dogru++;
-                            //   } else if (siralanmisCevapAnahtari[i] !=
-                            //       cevapAnahtariListe[i - 1]) {
-                            //     yanlis++;
-                            //   }
-                            // }
                             return GridView.builder(
                                 gridDelegate:
                                     SliverGridDelegateWithFixedCrossAxisCount(

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:omr/Dbo/Sonuclar.dart';
 import 'package:omr/Dbo/SonuclarCevap.dart';
 import 'package:http/http.dart' as http;
+import 'package:omr/SonucAyrinti.dart';
 import 'package:omr/main.dart';
 
 class SonuclarListesi extends StatefulWidget {
@@ -172,7 +173,17 @@ class _SonuclarListesiState extends State<SonuclarListesi> {
                                     ],
                                     onSelected: (menuItemValue) async {
                                       if (menuItemValue == 1) {
-
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => SonucAyrinti(
+                                                  sonuc.cevaplar_id,
+                                                  sonuc.test_id,
+                                                  sonuc.ogrenci_adi,
+                                                  sonuc.ogrenci_numarasi,
+                                                  sonuc.alinan_puan,
+                                                  sonuc.ogrenci_cevaplar
+                                                )));
                                       }else if(menuItemValue == 2){
                                         cevapSil(sonuc.cevaplar_id).then((value) => value.contains("true") ?
                                         ScaffoldMessenger.of(context)
