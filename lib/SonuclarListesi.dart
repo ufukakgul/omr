@@ -22,6 +22,7 @@ class SonuclarListesi extends StatefulWidget {
 
 class _SonuclarListesiState extends State<SonuclarListesi> {
   bool durum = false;
+  String? cevapId;
 
   List<Sonuclar> parseSonuclarCevap(String cevap) {
     var jsonVeri = json.decode(cevap);
@@ -39,6 +40,15 @@ class _SonuclarListesiState extends State<SonuclarListesi> {
     };
     var cevap = await http.post(url, body: veri);
     return parseSonuclarCevap(cevap.body);
+  }
+
+  Future<String> cevapSil(String cevaplar_id) async {
+    var url = Uri.parse("http://ufuk.site/omr/test_islemleri/cevap_sil.php");
+    var veri = {
+      "cevaplar_id": cevaplar_id,
+    };
+    var cevap = await http.post(url, body: veri);
+    return cevap.body;
   }
 
   @override
@@ -123,6 +133,7 @@ class _SonuclarListesiState extends State<SonuclarListesi> {
                                     children: [
                                       Text("${sonuc.ogrenci_numarasi}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),),
                                       Text("${sonuc.ogrenci_adi}", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+                                      // Text("${sonuc.cevaplar_id}", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400)),
                                     ],
                                   ),
                                   SizedBox(
@@ -144,14 +155,14 @@ class _SonuclarListesiState extends State<SonuclarListesi> {
                                     ),
                                     child: Icon(Icons.more_vert),
                                     itemBuilder: (context) => [
-                                      PopupMenuItem(value: 2, child: Row(
+                                      PopupMenuItem(value: 1, child: Row(
                                         children: [
                                           Icon(Icons.person_search_outlined),
                                           SizedBox(width: 5,),
                                           Text("İncele")
                                         ],
                                       )),
-                                      PopupMenuItem(value: 1, child: Row(
+                                      PopupMenuItem(value: 2, child: Row(
                                         children: [
                                           Icon(Icons.delete),
                                           SizedBox(width: 5,),
@@ -163,7 +174,19 @@ class _SonuclarListesiState extends State<SonuclarListesi> {
                                       if (menuItemValue == 1) {
 
                                       }else if(menuItemValue == 2){
-
+                                        cevapSil(sonuc.cevaplar_id).then((value) => value.contains("true") ?
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                            content: Text(
+                                                "Kayıt Silindi")))
+                                            : ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                            content: Text(
+                                                "Kayıt Silinemedi"))));
+                                        await Future.delayed(
+                                            Duration(seconds: 3));
+                                        setState(() {
+                                        });
                                       }
                                     },
                                   )

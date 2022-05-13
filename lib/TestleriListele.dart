@@ -249,7 +249,11 @@ class _TestleriListeleState extends State<TestleriListele> {
                     child: Column(
                       children: [
                         for (int i = 0; i < testSayisi; i++)
-                          Card(
+                          GestureDetector(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => SonuclarListesi(int.parse(testListesi[i].test_id), testListesi[i].test_baslik)));
+                            },
+                            child: Card(
                             color: Colors.indigoAccent.shade100.withOpacity(0.5),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.all(Radius.circular(16))),
@@ -288,30 +292,33 @@ class _TestleriListeleState extends State<TestleriListele> {
                                   width: ekranGenisligi/2.3,
                                   decoration: BoxDecoration(
                                     // color: Colors.indigoAccent.shade100.withOpacity(0.1),
-                                    color: Colors.grey.shade50,
-                                    border: Border.all(
-                                      color: Colors.indigoAccent.shade200.withOpacity(0.9),
-                                      width: 1,
-                                    ),
-                                    borderRadius: BorderRadius.all(Radius.circular(50))
+                                      color: Colors.white10,
+                                      border: Border.all(
+                                        color: Colors.white,
+                                        width: 2,
+                                      ),
+                                      borderRadius: BorderRadius.all(Radius.circular(50))
                                   ),
                                   child: Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                     children: [
                                       IconButton(
                                           onPressed: () {
                                             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ManeulOkuma(testListesi[i].test_id, testListesi[i].cevap_anahtari.length ~/ 3, widget.kAdi, widget.kId)));
                                           },
                                           icon:
-                                              Icon(LineariconsFree.spell_check),
-                                          iconSize: 30),
+                                          Icon(LineariconsFree.spell_check),
+                                          iconSize: 30,
+                                          splashColor: Colors.white,
+                                      ),
                                       IconButton(
                                         onPressed: () {
                                           testOkuFromCamera(testListesi[i].test_id, testListesi[i].cevap_anahtari.length ~/ 3);
                                         },
                                         icon: Icon(Icons.camera_alt_outlined),
                                         iconSize: 30,
+                                        splashColor: Colors.white,
                                       ),
                                       IconButton(
                                         onPressed: () {
@@ -319,69 +326,48 @@ class _TestleriListeleState extends State<TestleriListele> {
                                         },
                                         icon: Icon(Icons.upload),
                                         iconSize: 30,
+                                        splashColor: Colors.white,
                                       ),
                                     ],
                                   ),
                                 ),
-                                PopupMenuButton(
-                                  child: Icon(Icons.more_vert),
-                                  //color: Color(0xffbcb8ce),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                      bottomLeft: Radius.circular(16.0),
-                                      bottomRight: Radius.circular(16.0),
-                                      topLeft: Radius.circular(16.0),
-                                      topRight: Radius.circular(16.0),
-                                    ),
-                                  ),
-                                  itemBuilder: (context) => [
-                                    PopupMenuItem(value: 2, child: Row(
-                                      children: [
-                                        Icon(Icons.list_outlined),
-                                        SizedBox(width: 5,),
-                                        Text("Sonuçları Gör")
-                                      ],
-                                    )),
-                                    PopupMenuItem(value: 1, child: Row(
-                                      children: [
-                                        Icon(Icons.delete),
-                                        SizedBox(width: 5,),
-                                        Text("Sil")
-                                      ],
-                                    )),
-                                  ],
-                                  onSelected: (menuItemValue) async {
-                                    if (menuItemValue == 1) {
-                                      testSil(widget.kId,
+                                IconButton(
+                                  onPressed: () async{
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                        content: Text(
+                                            "${testListesi[i].test_baslik} testi silinecektir. Onaylıyor musunuz?"),
+                                      duration: Duration(seconds: 5),
+                                      action: SnackBarAction(
+                                        label: "Onayla",
+                                        textColor: Colors.white,
+                                        onPressed: () async{
+                                          testSil(widget.kId,
                                               testListesi[i].test_id.toString())
-                                          .then((value) => value
-                                                  .contains("true")
+                                              .then((value) => value
+                                              .contains("true")
                                               ? ScaffoldMessenger.of(context)
-                                                  .showSnackBar(SnackBar(
-                                                      content: Text(
-                                                          "Kayıt Silindi")))
+                                              .showSnackBar(SnackBar(
+                                              content: Text(
+                                                  "Kayıt Silindi")))
                                               : ScaffoldMessenger.of(context)
-                                                  .showSnackBar(SnackBar(
-                                                      content: Text(
-                                                          "Kayıt Silinemedi"))));
-                                      await Future.delayed(
-                                          Duration(seconds: 3));
-                                      Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  TestleriListele(widget.kAdi,
-                                                      widget.kId)));
-                                    }else if(menuItemValue == 2){
-                                      testId = int.parse(testListesi[i].test_id);
-                                      testBaslik = testListesi[i].test_baslik;
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => SonuclarListesi(testId!, testBaslik)));
-                                    }
-                                  },
-                                )
+                                              .showSnackBar(SnackBar(
+                                              content: Text(
+                                                  "Kayıt Silinemedi"))));
+                                          await Future.delayed(
+                                              Duration(seconds: 3));
+                                          setState(() {
+                                          });
+                                        },
+                                      ),
+                                    ));
+                                },
+                                  icon: Icon(Icons.restore_from_trash),
+                                  color: Colors.white70,
+                                  splashColor: Colors.white,)
                               ],
                             ),
-                          ),
+                          ),)
                       ],
                     ),
                   )
